@@ -1,0 +1,44 @@
+﻿@model IEnumerable<TrashToRewardsV2.Models.KHOQUA>
+
+@{
+    ViewData["Title"] = "Danh sách Kho Quà";
+}
+
+<div class="container py-5">
+    <div class="bg-white bg-opacity-75 rounded p-4 shadow-sm">
+        <div class="row mb-4">
+            <div class="col-md-8 mx-auto text-center">
+                <h2 class="fw-bold mb-3 text-success">Danh sách Kho Quà</h2>
+                <p class="text-muted lead">Các điểm đổi quà của chương trình TrashToRewards</p>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-success">
+                    <tr>
+                        <th>Tên kho</th>
+                        <th>Địa chỉ</th>
+                        <th>SĐT</th>
+                        <th class="text-center">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var kho in Model)
+                    {
+                        <tr class="hover-card">
+                            <td><strong>@kho.TenKQ</strong></td>
+                            <td>@kho.DiaChiKQ</td>
+                            <td>@kho.SDTKQ</td>
+                            <td class="text-center">
+                                <a asp-action="KhoQuaDetails" asp-route-id="@kho.MaKQ" class="btn btn-success btn-sm rounded-pill px-3">
+                                    <i class="bi bi-eye-fill me-1"></i> Xem chi tiết
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

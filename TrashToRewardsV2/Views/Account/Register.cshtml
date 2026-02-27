@@ -1,0 +1,97 @@
+﻿@model TrashToRewardsV2.Models.NGUOIDUNG
+@{
+    ViewData["Title"] = "Đăng ký";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card border-0 shadow-lg">
+                <div class="card-body p-lg-5 p-4">
+                    <h2 class="text-center text-success fw-bold mb-4">Đăng ký tài khoản</h2>
+
+                    <form asp-action="Register" method="post">
+                        @if (ViewBag.Error != null)
+                        {
+                            <div class="alert alert-danger">@ViewBag.Error</div>
+                        }
+                        @if (!ViewData.ModelState.IsValid)
+                        {
+                            <div class="alert alert-danger">
+                                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                                {
+                                    <div>@error.ErrorMessage</div>
+                                }
+                            </div>
+                        }
+
+                        <div class="mb-3">
+                            <div class="form-floating">
+                                <input asp-for="HoTen" class="form-control" placeholder="Nhập họ tên" />
+                                <label asp-for="HoTen"></label>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="form-floating">
+                                <input asp-for="Email" class="form-control" placeholder="Nhập email" />
+                                <label asp-for="Email"></label>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="form-floating">
+                                <input asp-for="SDT" class="form-control" placeholder="Nhập số điện thoại" />
+                                <label asp-for="SDT"></label>
+                            </div>
+                        </div>
+
+                        <div class="mb-3 position-relative">
+                            <div class="form-floating">
+                                <input asp-for="MatKhau" type="password" class="form-control" id="registerPassword" placeholder="Nhập mật khẩu" />
+                                <label asp-for="MatKhau"></label>
+                            </div>
+                            <span class="position-absolute top-50 end-0 translate-middle-y me-3" style="cursor: pointer;" onclick="toggleRegisterPassword()">
+                                <i class="bi bi-eye"></i>
+                            </span>
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="form-floating">
+                                <input asp-for="DiaChi" class="form-control" placeholder="Nhập địa chỉ" />
+                                <label asp-for="DiaChi"></label>
+                            </div>
+                        </div>
+
+                        <div class="d-grid mb-3">
+                            <button type="submit" class="btn btn-success btn-lg rounded-pill fw-bold">Đăng ký</button>
+                        </div>
+                    </form>
+
+                    <div class="text-center mt-3">
+                        <p class="mb-0">Đã có tài khoản? <a href="/Account/Login" class="text-success fw-bold">Đăng nhập</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function toggleRegisterPassword() {
+            const input = document.getElementById('registerPassword');
+            const icon = event.currentTarget.querySelector('i');
+
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('bi-eye');
+                icon.classList.add('bi-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('bi-eye-slash');
+                icon.classList.add('bi-eye');
+            }
+        }
+    </script>
+}

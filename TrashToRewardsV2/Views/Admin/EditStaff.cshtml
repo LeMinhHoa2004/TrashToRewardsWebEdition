@@ -1,0 +1,92 @@
+﻿@model TrashToRewardsV2.Models.NHANVIEN
+@{
+    ViewData["Title"] = "Chỉnh sửa nhân viên";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-lg">
+                <div class="card-body p-lg-5 p-4">
+                    <h2 class="fw-bold text-success mb-4">✏️ Chỉnh sửa nhân viên</h2>
+
+                    <form asp-action="EditStaff" method="post" class="needs-validation" novalidate>
+                        @if (!ViewData.ModelState.IsValid)
+                        {
+                            <div asp-validation-summary="All" class="alert alert-danger" role="alert"></div>
+                        }
+                        <input type="hidden" asp-for="MaNV" />
+
+                        <div class="mb-4">
+                            <label asp-for="HoTenNV" class="form-label fw-medium">Họ tên</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-0">
+                                    <i class="bi bi-person-fill text-success"></i>
+                                </span>
+                                <input asp-for="HoTenNV" class="form-control border-0 bg-light" required />
+                            </div>
+                            <span asp-validation-for="HoTenNV" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="SDTNV" class="form-label fw-medium">Số điện thoại</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-0">
+                                    <i class="bi bi-telephone-fill text-success"></i>
+                                </span>
+                                <input asp-for="SDTNV" class="form-control border-0 bg-light" required />
+                            </div>
+                            <span asp-validation-for="SDTNV" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="EmailNV" class="form-label fw-medium">Email</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-0">
+                                    <i class="bi bi-envelope-fill text-success"></i>
+                                </span>
+                                <input asp-for="EmailNV" class="form-control border-0 bg-light" type="email" required />
+                            </div>
+                            <span asp-validation-for="EmailNV" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="MatKhauNV" class="form-label fw-medium">Mật khẩu</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-0">
+                                    <i class="bi bi-lock-fill text-success"></i>
+                                </span>
+                                <input asp-for="MatKhauNV" class="form-control border-0 bg-light" type="text" required />
+                            </div>
+                            <span asp-validation-for="MatKhauNV" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="MaDV" class="form-label fw-medium">Đơn vị thu gom</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-0">
+                                    <i class="bi bi-building-fill text-success"></i>
+                                </span>
+                                <select asp-for="MaDV" class="form-select border-0 bg-light" asp-items="ViewBag.DonViList"></select>
+                            </div>
+                            <span asp-validation-for="MaDV" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-flex gap-3 mt-4">
+                            <button type="submit" class="btn btn-success px-4 py-2 rounded-pill fw-medium">
+                                <i class="bi bi-check-circle me-2"></i>Lưu thay đổi
+                            </button>
+                            <a asp-action="Dashboard" class="btn btn-outline-secondary px-4 py-2 rounded-pill fw-medium">
+                                <i class="bi bi-arrow-left me-2"></i>Quay lại
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,104 @@
+﻿@model IEnumerable<PHIEUDATLICH>
+
+@{
+    ViewData["Title"] = "Danh sách phiếu đặt lịch";
+}
+
+<div class="container py-5">
+    <div class="row align-items-center mb-4">
+        <div class="col-md-8">
+            <h2 class="text-success fw-bold"><i class="bi bi-calendar me-2"></i>Danh sách đặt lịch của bạn</h2>
+        </div>
+        <div class="col-md-4 text-md-end">
+            <a asp-action="Create" class="btn btn-success btn-lg rounded-pill px-4">
+                <i class="bi bi-calendar-plus me-2"></i>Đặt lịch mới
+            </a>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-lg">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="bg-success text-white">
+                        <tr>
+                            <th class="px-4 py-3"><i class="bi bi-upc me-2"></i>Mã phiếu</th>
+                            <th class="px-4 py-3"><i class="bi bi-calendar-event me-2"></i>Ngày đặt lịch</th>
+                            <th class="px-4 py-3"><i class="bi bi-geo-alt me-2"></i>Địa điểm thu gom</th>
+                            <th class="px-4 py-3"><i class="bi bi-star me-2"></i>Trạng thái</th>
+                            <th class="px-4 py-3"><i class="bi bi-tools me-2"></i>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr class="hover-card">
+                                <td class="px-4 py-3">@item.MaPhieuDL</td>
+                                <td class="px-4 py-3">@item.NgayDL.ToString("dd/MM/yyyy HH:mm")</td>
+                                <td class="px-4 py-3">@item.DiaDiemDL</td>
+                                <td class="px-4 py-3">
+                                    @switch (item.TrangThaiDL)
+                                    {
+                                        case "ChuaXacNhan":
+                                            <span class="badge bg-warning p-2"><i class="bi bi-hourglass-split me-1"></i>Chưa xác nhận</span>
+                                            break;
+                                        case "DaXacNhan":
+                                            <span class="badge bg-info p-2"><i class="bi bi-check-circle me-1"></i>Đã xác nhận</span>
+                                            break;
+                                        case "DaXuLy":
+                                            <span class="badge bg-success p-2"><i class="bi bi-check-circle-fill me-1"></i>Đã xử lý</span>
+                                            break;
+                                        case "DaHuy":
+                                            <span class="badge bg-danger p-2"><i class="bi bi-x-circle me-1"></i>Đã hủy</span>
+                                            break;
+                                    }
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div class="btn-group" role="group">
+                                        <a asp-action="Details" asp-route-id="@item.MaPhieuDL" class="btn btn-sm btn-outline-success">
+                                            <i class="bi bi-info-circle"></i> Chi tiết
+                                        </a>
+
+                                        @if (item.TrangThaiDL == "ChuaXacNhan" || item.TrangThaiDL == "DaXacNhan")
+                                        {
+                                            <form asp-action="Cancel" asp-route-id="@item.MaPhieuDL" method="post"
+                                                  onsubmit="return confirm('Bạn có chắc muốn hủy đặt lịch này?');">
+                                                <button type="submit" class="btn btn-sm btn-outline-danger ms-1">
+                                                    <i class="bi bi-x-circle"></i> Hủy
+                                                </button>
+                                            </form>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            @if (!Model.Any())
+            {
+                <div class="text-center p-5">
+                    <i class="bi bi-calendar-x text-muted" style="font-size: 4rem;"></i>
+                    <p class="text-muted mt-3 mb-0">Bạn chưa có phiếu đặt lịch nào</p>
+                    <p class="mb-4">Hãy đặt lịch ngay để đóng góp vào việc tái chế phế liệu!</p>
+                    <a asp-action="Create" class="btn btn-success rounded-pill px-4">
+                        <i class="bi bi-calendar-plus me-2"></i>Đặt lịch ngay
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm mt-4 bg-light">
+        <div class="card-body p-4">
+            <div class="d-flex align-items-center">
+                <i class="bi bi-info-circle-fill text-success me-3" style="font-size: 1.5rem;"></i>
+                <div>
+                    <h5 class="mb-1">Hướng dẫn</h5>
+                    <p class="mb-0">Bạn có thể xem chi tiết phiếu đặt lịch và hủy những phiếu chưa được xử lý. Trạng thái "Đã xử lý" chỉ các phiếu đã được thu gom thành công.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

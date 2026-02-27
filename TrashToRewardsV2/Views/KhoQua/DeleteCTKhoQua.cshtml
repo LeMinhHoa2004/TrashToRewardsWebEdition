@@ -1,0 +1,50 @@
+﻿@model TrashToRewardsV2.Models.CTKHOQUA
+@{
+    ViewData["Title"] = "Xóa chi tiết Kho";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-lg">
+                <div class="card-header bg-danger text-white py-3">
+                    <h3 class="card-title mb-0">
+                        <i class="bi bi-exclamation-triangle me-2"></i>Xóa chi tiết Kho
+                    </h3>
+                </div>
+                <div class="card-body p-lg-5 p-4">
+                    <div class="text-center mb-4">
+                        <i class="bi bi-gift-fill text-danger" style="font-size: 5rem;"></i>
+                    </div>
+
+                    <div class="alert alert-danger">
+                        <p class="mb-0">Bạn có chắc chắn muốn xóa phần thưởng <strong>@Model.PHANTHUONG.TenQua</strong> ra khỏi kho không?</p>
+                    </div>
+
+                    <p class="text-muted mb-4">
+                        <i class="bi bi-info-circle me-2"></i>Phần thưởng sẽ bị xóa khỏi kho này nhưng vẫn còn trong hệ thống.
+                    </p>
+
+                    <form asp-action="DeleteCTKhoQuaConfirmed" method="post">
+                        @if (!ViewData.ModelState.IsValid)
+                        {
+                            <div asp-validation-summary="All" class="alert alert-danger" role="alert"></div>
+                        }
+
+                        <input type="hidden" name="maKQ" value="@Model.MaKQ" />
+                        <input type="hidden" name="maQua" value="@Model.MaQua" />
+
+                        <div class="d-flex justify-content-center gap-3 mt-4">
+                            <a asp-action="Details" asp-route-id="@Model.MaKQ" class="btn btn-outline-secondary rounded-pill px-4">
+                                <i class="bi bi-x-circle me-2"></i>Hủy
+                            </a>
+                            <button type="submit" class="btn btn-danger rounded-pill px-5">
+                                <i class="bi bi-trash me-2"></i>Xác nhận xóa
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

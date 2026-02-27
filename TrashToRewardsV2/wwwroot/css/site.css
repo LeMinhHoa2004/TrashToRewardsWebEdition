@@ -1,0 +1,265 @@
+﻿html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
+  color: var(--bs-secondary-color);
+  text-align: end;
+}
+
+.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
+  text-align: start;
+}
+/* Hero section styling */
+.hero-section {
+    background-image: url('/images/taiche.png');
+    background-size: cover;
+    background-position: center;
+    min-height: 600px;
+    display: flex;
+    align-items: center;
+    color: white;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.3));
+}
+
+/* Card hover effects */
+.hover-card {
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+    .hover-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15) !important;
+    }
+
+/* Timeline styling */
+.timeline {
+    position: relative;
+    padding: 20px 0;
+}
+
+    .timeline:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 50%;
+        width: 3px;
+        margin-left: -1.5px;
+        background-color: #e9ecef;
+    }
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 50px;
+}
+
+.timeline-badge {
+    position: absolute;
+    top: 16px;
+    left: 50%;
+    width: 50px;
+    height: 50px;
+    margin-left: -25px;
+    border-radius: 50%;
+    text-align: center;
+    font-size: 1.4em;
+    line-height: 50px;
+    z-index: 1;
+}
+
+.timeline-panel {
+    position: relative;
+    width: 46%;
+}
+
+.timeline-item:nth-child(even) .timeline-panel {
+    float: right;
+    margin-left: 54%;
+}
+
+.timeline-item:nth-child(odd) .timeline-panel {
+    float: left;
+    margin-right: 54%;
+}
+
+.timeline-panel:after {
+    content: '';
+    position: absolute;
+    top: 27px;
+    border-style: solid;
+}
+
+.timeline-item:nth-child(odd) .timeline-panel:after {
+    right: -10px;
+    border-width: 10px 0 10px 10px;
+    border-color: transparent transparent transparent #fff;
+}
+
+.timeline-item:nth-child(even) .timeline-panel:after {
+    left: -10px;
+    border-width: 10px 10px 10px 0;
+    border-color: transparent #fff transparent transparent;
+}
+
+/* Category card hover */
+.hover-zoom {
+    transition: transform 0.3s;
+}
+
+    .hover-zoom:hover {
+        transform: scale(1.05);
+    }
+
+/* For mobile view */
+@media (max-width: 768px) {
+    .timeline:before {
+        left: 40px;
+    }
+
+    .timeline-badge {
+        left: 40px;
+        margin-left: 0;
+    }
+
+    .timeline-panel {
+        width: calc(100% - 90px);
+        float: right !important;
+        margin-left: 90px !important;
+        margin-right: 0 !important;
+    }
+
+    .timeline-item:nth-child(odd) .timeline-panel:after,
+    .timeline-item:nth-child(even) .timeline-panel:after {
+        left: -10px;
+        border-width: 10px 10px 10px 0;
+        border-color: transparent #fff transparent transparent;
+    }
+}
+body {
+    background-image: url('/images/gia-dich-vu-thu-gom-rac.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+}
+.visible {
+    animation: fadeInUp 0.5s ease forwards;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Style cho hover trên các hàng bảng */
+.hover-card-row {
+    transition: all 0.3s ease;
+}
+
+/* Styling cho badge điểm */
+.badge {
+    transition: transform 0.3s;
+}
+
+    .badge:hover {
+        transform: scale(1.1);
+    }
+
+/* Card với border xanh lá */
+.card-success {
+    border-left: 4px solid #198754;
+}
+
+/* Style cho các bảng */
+.table {
+    border-collapse: separate;
+    border-spacing: 0 5px;
+}
+
+    .table thead th {
+        border-bottom: 2px solid #198754;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+    }
+
+    .table tbody tr {
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+        .table tbody tr:hover {
+            transform: translateY(-2px);
+        }
+
+/* Style cho nút hành động */
+.btn-outline-success:hover {
+    box-shadow: 0 0 10px rgba(25, 135, 84, 0.4);
+}
+
+/* Style cho phần thông tin trống */
+.empty-state {
+    padding: 3rem 0;
+    text-align: center;
+}
+
+    .empty-state i {
+        font-size: 4rem;
+        color: #dee2e6;
+    }
+
+    .empty-state p {
+        font-size: 1.1rem;
+        margin-top: 1rem;
+    }
+
+/* Tiêu đề trang */
+.page-title {
+    position: relative;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+    .page-title:after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 50px;
+        height: 3px;
+        background-color: #198754;
+    }

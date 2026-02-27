@@ -1,0 +1,64 @@
+﻿@model TrashToRewardsV2.Models.NHANVIENGQ
+
+@{
+    ViewData["Title"] = "Xóa nhân viên giao quà";
+
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-lg">
+                <div class="card-header bg-danger text-white py-3">
+                    <h4 class="mb-0">
+                        <i class="bi bi-trash-fill me-2"></i>Xác nhận xóa nhân viên giao quà
+                    </h4>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <dl class="row">
+                                <dt class="col-sm-4 text-success fw-bold">Họ tên</dt>
+                                <dd class="col-sm-8">@Model.HoTenNVGQ</dd>
+
+                                <dt class="col-sm-4 text-success fw-bold">Email</dt>
+                                <dd class="col-sm-8">@Model.EmailNVGQ</dd>
+
+                                <dt class="col-sm-4 text-success fw-bold">Số điện thoại</dt>
+                                <dd class="col-sm-8">@Model.SDTNVGQ</dd>
+
+                                <dt class="col-sm-4 text-success fw-bold">Kho quà quản lý</dt>
+                                <dd class="col-sm-8">@Model.KHOQUA?.TenKQ</dd>
+                            </dl>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <i class="bi bi-person-x text-danger" style="font-size: 80px;"></i>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-warning mt-4 border-0 shadow-sm" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        <strong>Cảnh báo:</strong> Bạn có chắc chắn muốn xóa nhân viên này không? Hành động này không thể hoàn tác.
+                    </div>
+
+                    <form asp-action="Delete" method="post">
+                        @if (!ViewData.ModelState.IsValid)
+                        {
+                            <div asp-validation-summary="All" class="alert alert-danger" role="alert"></div>
+                        }
+
+                        <input type="hidden" asp-for="MaNVGQ" />
+                        <div class="d-flex justify-content-center gap-3 mt-4">
+                            <a asp-action="Index" class="btn btn-outline-secondary rounded-pill px-4 py-2">
+                                <i class="bi bi-x-circle me-2"></i>Hủy bỏ
+                            </a>
+                            <button type="submit" class="btn btn-danger rounded-pill px-5 py-2">
+                                <i class="bi bi-trash me-2"></i>Xác nhận xóa
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

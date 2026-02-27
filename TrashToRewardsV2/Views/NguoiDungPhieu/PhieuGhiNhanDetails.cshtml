@@ -1,0 +1,94 @@
+﻿@model TrashToRewardsV2.Models.PHIEUGHINHAN
+
+@{
+    ViewData["Title"] = "Chi tiết Phiếu Ghi Nhận";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4 text-primary text-center">Chi tiết Phiếu Ghi Nhận</h2>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-info text-white fw-bold">
+            <i class="bi bi-info-circle me-2"></i>Thông tin phiếu
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <div class="d-flex align-items-center">
+                        <span class="fw-bold me-2">Mã Phiếu:</span>
+                        <span>@Model.MaPhieuGN</span>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="d-flex align-items-center">
+                        <span class="fw-bold me-2">Ngày Ghi Nhận:</span>
+                        <span>@Model.NgayGhiNhan.ToString("dd/MM/yyyy HH:mm")</span>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="d-flex align-items-center">
+                        <span class="fw-bold me-2">Tổng điểm:</span>
+                        <span class="fw-bold text-success">@Model.TongDiemGN</span>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <strong>Người dùng:</strong> @Model.NGUOIDUNG?.HoTen
+                    </div>
+                    <div class="col-md-4">
+                        <strong>Nhân viên ghi nhận:</strong> @Model.NHANVIEN?.HoTenNV
+                    </div>
+                    <div class="col-md-4">
+                        <strong>Đơn vị thu gom:</strong> @Model.NHANVIEN?.DONVITHUGOM?.TenDV
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-success text-white fw-bold">
+            <i class="bi bi-recycle me-2"></i>Chi tiết phế liệu ghi nhận
+        </div>
+        <div class="card-body">
+            @if (Model.CTPHIEUGHINHANs != null && Model.CTPHIEUGHINHANs.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-striped align-middle">
+                        <thead>
+                            <tr>
+                                <th>Loại Phế Liệu</th>
+                                <th>Khối Lượng</th>
+                                <th>Điểm Nhận</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var ct in Model.CTPHIEUGHINHANs)
+                            {
+                                <tr>
+                                    <td>
+                                        <i class="bi bi-box-seam me-2 text-success"></i>
+                                        @ct.LOAIPHELIEU?.TenLoai
+                                    </td>
+                                    <td>@ct.KhoiLuongGN</td>
+                                    <td class="text-success fw-bold">@ct.SoDiemNhanDuocGN</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <p class="text-muted">Không có chi tiết phế liệu.</p>
+            }
+
+            <div class="mt-3">
+                <a asp-action="PhieuGhiNhan" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left-circle me-1"></i> Quay lại danh sách
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

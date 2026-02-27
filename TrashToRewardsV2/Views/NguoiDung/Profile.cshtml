@@ -1,0 +1,122 @@
+﻿@model TrashToRewardsV2.ViewModels.ProfileViewModel
+
+@{
+    ViewData["Title"] = "Thông tin cá nhân";
+    bool isNhanVien = User.IsInRole("NHANVIEN");
+    bool isNhanVienGQ = User.IsInRole("NHANVIENGQ");
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <!-- Banner profile -->
+            <div class="bg-white bg-opacity-75 rounded p-4 mb-5">
+                <div class="row">
+                    <div class="col-md-8 mx-auto text-center">
+                        <div class="d-flex align-items-center justify-content-center mb-3">
+                            <i class="bi bi-person-circle text-success me-3" style="font-size: 2.5rem;"></i>
+                            <h2 class="text-success fw-bold mb-0">@ViewData["Title"]</h2>
+                        </div>
+                        @if (Model.DiemTichLuy.HasValue)
+                        {
+                            <div class="d-flex justify-content-center align-items-center">
+                                <span class="badge bg-success rounded-pill px-3 py-2 fs-5 mb-3">
+                                    <i class="bi bi-star-fill me-2"></i>
+                                    Điểm tích lũy: @Model.DiemTichLuy
+                                </span>
+                            </div>
+                        }
+                        <p class="lead text-muted">Cập nhật thông tin cá nhân của bạn</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form cập nhật thông tin cá nhân -->
+            <div class="card border-0 shadow-lg mb-5">
+                <div class="card-body p-lg-5 p-4">
+                    <div class="d-flex align-items-center mb-4">
+                        <i class="bi bi-pencil-square text-success me-3" style="font-size: 2rem;"></i>
+                        <h3 class="mb-0 text-success fw-bold">Cập nhật thông tin</h3>
+                    </div>
+
+                    <form asp-action="UpdateProfile" method="post">
+                        <input type="hidden" asp-for="Id" />
+                        @if (!ViewData.ModelState.IsValid)
+                        {
+                            <div asp-validation-summary="All" class="alert alert-danger" role="alert"></div>
+                        }
+                        
+
+                        <div class="bg-light p-4 rounded mb-4">
+                            <div class="mb-3">
+                                <label asp-for="HoTen" class="form-label fw-bold text-success">
+                                    <i class="bi bi-person-fill me-2"></i>Họ và tên
+                                </label>
+                                <input asp-for="HoTen" class="form-control border-0 shadow-sm" placeholder="Nhập họ và tên" />
+                                <span asp-validation-for="HoTen" class="text-danger"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="Email" class="form-label fw-bold text-success">
+                                    <i class="bi bi-envelope-fill me-2"></i>Email
+                                </label>
+                                <input asp-for="Email" class="form-control border-0 shadow-sm" placeholder="Địa chỉ email của bạn" />
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="SDT" class="form-label fw-bold text-success">
+                                    <i class="bi bi-telephone-fill me-2"></i>Số điện thoại
+                                </label>
+                                <input asp-for="SDT" class="form-control border-0 shadow-sm" placeholder="Số điện thoại liên hệ" />
+                                <span asp-validation-for="SDT" class="text-danger"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                @if (isNhanVien)
+                                {
+                                    <label class="form-label fw-bold text-success">
+                                        <i class="bi bi-building-fill me-2"></i>Đơn vị thu gom
+                                    </label>
+                                    <input asp-for="DiaChi" class="form-control border-0 shadow-sm bg-light" readonly />
+                                    <span asp-validation-for="DiaChi" class="text-danger"></span>
+                                }
+                                else if (isNhanVienGQ)
+                                {
+                                    <label class="form-label fw-bold text-success">
+                                        <i class="bi bi-box-seam-fill me-2"></i>Kho quà đang quản lý
+                                    </label>
+                                    <input asp-for="DiaChi" class="form-control border-0 shadow-sm bg-light" readonly />
+                                    <span asp-validation-for="DiaChi" class="text-danger"></span>
+                                }
+                                else
+                                {
+                                    <label asp-for="DiaChi" class="form-label fw-bold text-success">
+                                        <i class="bi bi-geo-alt-fill me-2"></i>Địa chỉ
+                                    </label>
+                                    <input asp-for="DiaChi" class="form-control border-0 shadow-sm" placeholder="Địa chỉ của bạn" />
+                                    <span asp-validation-for="DiaChi" class="text-danger"></span>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="text-end">
+                            <button type="submit" class="btn btn-success btn-lg rounded-pill px-4">
+                                <i class="bi bi-save-fill me-2"></i>Cập nhật thông tin
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Form đổi mật khẩu (partial) -->
+            @await Html.PartialAsync("_ChangePasswordPartial", new TrashToRewardsV2.ViewModels.ChangePasswordViewModel())
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

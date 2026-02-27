@@ -1,0 +1,73 @@
+﻿@model TrashToRewardsV2.Models.PHANTHUONG
+
+@{
+    ViewData["Title"] = "Xóa phần thưởng";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-lg rounded">
+                <div class="card-body p-lg-5 p-4">
+                    <h2 class="fw-bold text-success mb-4">Xác nhận xóa phần thưởng</h2>
+
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            @if (!string.IsNullOrEmpty(Model.HinhAnh))
+                            {
+                                <div class="rounded overflow-hidden shadow-sm hover-card">
+                                    <img src="~/images/@Model.HinhAnh" alt="@Model.TenQua" class="img-fluid" />
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="rounded bg-light p-4 text-center shadow-sm hover-card">
+                                    <i class="bi bi-gift-fill text-success" style="font-size: 5rem;"></i>
+                                </div>
+                            }
+                        </div>
+                        <div class="col-md-8">
+                            <div class="p-3 bg-light rounded">
+                                <div class="mb-3">
+                                    <strong class="text-success">Tên phần thưởng:</strong>
+                                    <span class="ms-2">@Model.TenQua</span>
+                                </div>
+                                <div class="mb-3">
+                                    <strong class="text-success">Điểm đổi:</strong>
+                                    <span class="ms-2">@Model.DiemDoi điểm</span>
+                                </div>
+                                <div class="mb-3">
+                                    <strong class="text-success">Số lượng còn:</strong>
+                                    <span class="ms-2">@Model.SoLuongCon</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-danger rounded mb-4">
+                        <i class="bi bi-exclamation-circle-fill me-2"></i>
+                        Bạn có chắc chắn muốn xóa phần thưởng <strong>@Model.TenQua</strong> không?
+                    </div>
+
+                    <form asp-action="DeleteRewardConfirmed" method="post">
+                        <input type="hidden" name="MaQua" value="@Model.MaQua" />
+                        <div class="d-flex gap-3">
+                            <button type="submit" class="btn btn-danger px-4 rounded-pill">
+                                <i class="bi bi-trash-fill me-2"></i>Xóa
+                            </button>
+                            <a asp-action="Dashboard" class="btn btn-outline-secondary px-4 rounded-pill">
+                                <i class="bi bi-x-circle me-2"></i>Hủy
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

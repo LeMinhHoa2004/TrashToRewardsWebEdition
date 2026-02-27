@@ -1,0 +1,86 @@
+﻿@model IEnumerable<LICHSUTICHDIEM>
+
+@{
+    ViewData["Title"] = "Lịch sử tích điểm";
+    var nguoiDung = ViewBag.NguoiDung;
+}
+
+<div class="container py-5">
+    <div class="bg-white bg-opacity-75 rounded p-4 mb-4">
+        <div class="row mb-3">
+            <div class="col-md-8">
+                <h2 class="fw-bold text-success mb-3">Lịch sử tích điểm</h2>
+                <p class="lead text-muted">Theo dõi các hoạt động và thay đổi điểm của bạn</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card border-0 shadow-sm hover-card">
+                <div class="card-body d-flex justify-content-between align-items-center p-4">
+                    <div>
+                        <h5 class="mb-0 text-muted">Điểm tích lũy hiện tại</h5>
+                        <h2 class="text-success fw-bold">@nguoiDung.DiemTichLuy</h2>
+                    </div>
+                    <div class="bg-success bg-opacity-10 p-3 rounded-circle">
+                        <i class="bi bi-piggy-bank-fill fs-1 text-success"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm hover-card mb-4">
+        <div class="card-header bg-success text-white d-flex justify-content-between align-items-center p-3">
+            <h5 class="mb-0"><i class="bi bi-clock-history me-2"></i> Lịch sử hoạt động</h5>
+        </div>
+        <div class="card-body p-0">
+            @if (Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="py-3"><i class="bi bi-calendar-event me-2"></i>Ngày giờ</th>
+                                <th class="py-3"><i class="bi bi-graph-up-arrow me-2"></i>Thay đổi điểm</th>
+                                <th class="py-3"><i class="bi bi-info-circle me-2"></i>Lý do</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                var diemClass = item.SoDiemThayDoi >= 0 ? "text-success" : "text-danger";
+                                var bgClass = item.SoDiemThayDoi >= 0 ? "bg-success" : "bg-danger";
+                                var icon = item.SoDiemThayDoi >= 0 ? "bi-arrow-up-circle-fill" : "bi-arrow-down-circle-fill";
+                                <tr>
+                                    <td class="py-3">@item.NgayGioCapNhat.ToString("dd/MM/yyyy HH:mm")</td>
+                                    <td class="@diemClass fw-bold py-3">
+                                        <span class="badge rounded-pill @bgClass bg-opacity-50 px-3 py-2">
+                                            <i class="bi @icon me-1"></i> @(item.SoDiemThayDoi >= 0 ? "+" : "")@item.SoDiemThayDoi
+                                        </span>
+                                    </td>
+                                    <td class="py-3">@item.LyDo</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="p-5 text-center">
+                    <i class="bi bi-info-circle text-muted fs-1 mb-3"></i>
+                    <h5 class="text-muted">Chưa có lịch sử tích điểm</h5>
+                    <p class="text-muted">Hãy bắt đầu tham gia các hoạt động để tích điểm</p>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="text-end">
+        <a asp-controller="NguoiDung" asp-action="Profile" class="btn btn-outline-success rounded-pill px-4">
+            <i class="bi bi-arrow-left me-2"></i> Quay lại hồ sơ
+        </a>
+    </div>
+</div>

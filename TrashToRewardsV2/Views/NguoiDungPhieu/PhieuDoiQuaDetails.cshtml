@@ -1,0 +1,82 @@
+﻿@model TrashToRewardsV2.Models.PHIEUDOIQUA
+
+@{
+    ViewData["Title"] = "Chi tiết Phiếu Đổi Quà";
+}
+
+<div class="container py-5">
+    <div class="bg-white bg-opacity-75 rounded p-4 shadow-sm">
+        <div class="row mb-4">
+            <div class="col-md-8 mx-auto text-center">
+                <h2 class="fw-bold mb-3 text-success">Chi tiết Phiếu Đổi Quà</h2>
+            </div>
+        </div>
+
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><i class="bi bi-calendar-check text-success me-2"></i><strong>Ngày đổi:</strong> @Model.NgayGioDoi.ToString("dd/MM/yyyy HH:mm")</p>
+                        <p><i class="bi bi-shop text-success me-2"></i><strong>Kho quà:</strong> @Model.KHOQUA?.TenKQ</p>
+                        <p><i class="bi bi-coin text-success me-2"></i><strong>Điểm sử dụng:</strong> @Model.SoDiemSuDung</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><i class="bi bi-truck text-success me-2"></i><strong>Hình thức nhận:</strong> @Model.HinhThucNhanQua</p>
+                        <p><i class="bi bi-geo-alt text-success me-2"></i><strong>Địa điểm nhận:</strong> @Model.DiaDiemNhanQua</p>
+                        <p>
+                            <i class="bi bi-info-circle text-success me-2"></i><strong>Trạng thái:</strong>
+                            @{
+                                string badgeClass = "bg-secondary";
+                                if (Model.TrangThai == "Đã xác nhận")
+                                {
+                                    badgeClass = "bg-success";
+                                }
+                                else if (Model.TrangThai == "Đang xử lý")
+                                {
+                                    badgeClass = "bg-warning text-dark";
+                                }
+                                else if (Model.TrangThai == "Đã hủy")
+                                {
+                                    badgeClass = "bg-danger";
+                                }
+                            }
+                            <span class="badge @badgeClass">@Model.TrangThai</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h4 class="mb-3 text-success fw-bold"><i class="bi bi-gift me-2"></i>Danh sách phần thưởng đã đổi</h4>
+
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-success">
+                    <tr>
+                        <th>Tên phần thưởng</th>
+                        <th>Số lượng đổi</th>
+                        <th>Điểm cần</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var ct in Model.CTPHIEUDOIQUAs)
+                    {
+                        <tr class="hover-card">
+                            <td><strong>@ct.PHANTHUONG?.TenQua</strong></td>
+                            <td>
+                                <span class="badge bg-success rounded-pill">@ct.SoLuongDoi</span>
+                            </td>
+                            <td>@ct.SoDiemCan</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="text-center mt-4">
+            <a asp-action="PhieuDoiQua" class="btn btn-outline-success rounded-pill px-4">
+                <i class="bi bi-arrow-left me-2"></i>Quay lại danh sách phiếu đổi quà
+            </a>
+        </div>
+    </div>
+</div>

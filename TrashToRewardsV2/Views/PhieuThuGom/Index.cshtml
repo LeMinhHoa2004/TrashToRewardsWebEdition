@@ -1,0 +1,110 @@
+﻿@model IEnumerable<PHIEUTHUGOM>
+
+@{
+    ViewData["Title"] = "Danh sách phiếu thu gom";
+}
+
+<div class="container py-4">
+    <div class="card border-0 shadow-lg mb-4">
+        <div class="card-body p-4">
+            <h2 class="fw-bold text-success mb-4">Danh sách phiếu thu gom</h2>
+
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Mã phiếu thu gom</th>
+                            <th>Khách hàng</th>
+                            <th>Ngày thu gom</th>
+                            <th>Tổng điểm</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr class="align-middle hover-card-row">
+                                <td>@item.MaPhieu</td>
+                                <td>@item.XACNHAN?.PHIEUDATLICH?.NGUOIDUNG?.HoTen</td>
+                                <td>@item.XACNHAN?.PHIEUDATLICH?.NgayDL.ToString("dd/MM/yyyy HH:mm")</td>
+                                <td>
+                                    <span class="badge bg-success rounded-pill px-3 py-2 fs-6">@item.TongDiem điểm</span>
+                                </td>
+                                <td>
+                                    <a asp-action="Details" asp-route-id="@item.MaPhieu" class="btn btn-outline-success btn-sm rounded-pill">
+                                        <i class="bi bi-info-circle me-1"></i> Chi tiết
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            @if (!Model.Any())
+            {
+                <div class="text-center py-5">
+                    <i class="bi bi-trash text-muted" style="font-size: 3rem;"></i>
+                    <p class="text-muted mt-3">Chưa có phiếu thu gom nào</p>
+                    
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm hover-card h-100">
+                <div class="card-body p-4 text-center">
+                    <div class="mb-3">
+                        <i class="bi bi-recycle text-success fs-1"></i>
+                    </div>
+                    <h3 class="h5 text-success">Tổng rác đã thu gom</h3>
+                    <p class="display-6 fw-bold text-muted">@Model.Sum(p => p.TongDiem) điểm</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm hover-card h-100">
+                <div class="card-body p-4 text-center">
+                    <div class="mb-3">
+                        <i class="bi bi-clipboard-check text-success fs-1"></i>
+                    </div>
+                    <h3 class="h5 text-success">Số lượng phiếu</h3>
+                    <p class="display-6 fw-bold text-muted">@Model.Count()</p>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Add hover effect to rows
+        document.querySelectorAll('.hover-card-row').forEach(row => {
+            row.addEventListener('mouseover', function() {
+                this.classList.add('shadow-sm', 'bg-light', 'bg-opacity-50');
+            });
+
+            row.addEventListener('mouseout', function() {
+                this.classList.remove('shadow-sm', 'bg-light', 'bg-opacity-50');
+            });
+        });
+
+        // Add animation on scroll for cards
+        window.addEventListener('scroll', function() {
+            const cards = document.querySelectorAll('.hover-card');
+
+            cards.forEach(card => {
+                const position = card.getBoundingClientRect();
+
+                // If card is in viewport
+                if (position.top < window.innerHeight && position.bottom >= 0) {
+                    card.classList.add('visible');
+                }
+            });
+        });
+    </script>
+}

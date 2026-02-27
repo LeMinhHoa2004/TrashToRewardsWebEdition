@@ -1,0 +1,56 @@
+﻿@model IEnumerable<PHIEUTHUGOM>
+
+@{
+    ViewData["Title"] = "Danh sách phiếu thu gom";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4 text-primary text-center">Danh sách phiếu thu gom</h2>
+
+    <div class="card shadow-sm hover-card">
+        <div class="card-header bg-success text-white fw-bold">
+            <i class="bi bi-truck me-2"></i>Tất cả phiếu thu gom
+        </div>
+        <div class="card-body">
+            @if (!Model.Any())
+            {
+                <div class="text-center text-muted p-4">Chưa có phiếu thu gom nào</div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Mã phiếu</th>
+                                <th>Khách hàng</th>
+                                <th>Ngày thu gom</th>
+                                <th>Tổng điểm</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="fw-semibold">@item.MaPhieu</td>
+                                    <td>
+                                        <i class="bi bi-person-circle me-1 text-success"></i>
+                                        @item.XACNHAN?.PHIEUDATLICH?.NGUOIDUNG?.HoTen
+                                    </td>
+                                    <td>@item.XACNHAN?.PHIEUDATLICH?.NgayDL.ToString("dd/MM/yyyy HH:mm")</td>
+                                    <td class="text-success fw-bold">@item.TongDiem</td>
+                                    <td>
+                                        <a asp-action="PhieuThuGomDetails" asp-route-id="@item.MaPhieu" class="btn btn-sm btn-outline-success">
+                                            <i class="bi bi-info-circle me-1"></i> Chi tiết
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>

@@ -1,0 +1,100 @@
+﻿@model IEnumerable<TrashToRewardsV2.Models.PHIEUDOIQUA>
+
+@{
+    ViewData["Title"] = "Danh sách Phiếu Đổi Quà";
+}
+
+<div class="container py-5">
+    <div class="bg-white bg-opacity-75 rounded p-4 shadow-sm">
+        <div class="row mb-4">
+            <div class="col-md-8 mx-auto text-center">
+                <h2 class="fw-bold mb-3 text-success">Danh sách Phiếu Đổi Quà</h2>
+                <p class="lead text-muted">Lịch sử đổi quà của bạn</p>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-success">
+                    <tr>
+                        <th>Ngày đổi</th>
+                        <th>Kho quà</th>
+                        <th>Điểm sử dụng</th>
+                        <th>Hình thức</th>
+                        <th>Trạng thái</th>
+                        <th class="text-center">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr class="hover-card align-middle">
+                            <td class="py-3">@item.NgayGioDoi.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td class="py-3"><strong>@item.KHOQUA?.TenKQ</strong></td>
+                            <td class="py-3 text-center">
+                                <span class="badge bg-success rounded-pill px-3 py-2">@item.SoDiemSuDung</span>
+                            </td>
+                            <td class="py-3">
+                                @(
+                                    item.HinhThucNhanQua == "TaiNha" ? "Tại nhà" :
+                                    item.HinhThucNhanQua == "TrucTiep" ? "Trực tiếp" : item.HinhThucNhanQua)
+                            </td>
+                            <td class="py-3">
+                                @{
+                                    string badgeClass = "bg-secondary";
+                                    string displayText = item.TrangThai;
+
+                                    switch (item.TrangThai)
+                                    {
+                                        case "ChuaXacNhan":
+                                            badgeClass = "bg-warning text-dark";
+                                            displayText = "Chưa xác nhận";
+                                            break;
+                                        case "DaXacNhan":
+                                            badgeClass = "bg-primary";
+                                            displayText = "Đã xác nhận";
+                                            break;
+                                        case "DangGiao":
+                                            badgeClass = "bg-info text-dark";
+                                            displayText = "Đang giao";
+                                            break;
+                                        case "DaGiao":
+                                            badgeClass = "bg-success";
+                                            displayText = "Đã giao";
+                                            break;
+                                        case "ChuaNhan":
+                                            badgeClass = "bg-info text-dark";
+                                            displayText = "Chưa nhận";
+                                            break;
+                                        case "DaNhan":
+                                            badgeClass = "bg-success";
+                                            displayText = "Đã nhận";
+                                            break;
+                                        case "DaHuy":
+                                            badgeClass = "bg-danger";
+                                            displayText = "Đã hủy";
+                                            break;
+                                        default:
+                                            badgeClass = "bg-secondary";
+                                            displayText = item.TrangThai;
+                                            break;
+                                    }
+                                }
+                                <span class="badge @badgeClass">
+                                    <i class="bi bi-circle-fill me-1" style="font-size: 0.8rem;"></i>
+                                    @displayText
+                                </span>
+                            </td>
+                            <td class="text-center py-3">
+                                <a asp-action="PhieuDoiQuaDetails" asp-route-id="@item.MaPDQ" class="btn btn-success btn-sm rounded-pill px-3">
+                                    <i class="bi bi-eye-fill me-1"></i> Chi tiết
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</div>

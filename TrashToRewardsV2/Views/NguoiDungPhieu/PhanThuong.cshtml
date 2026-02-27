@@ -1,0 +1,41 @@
+﻿@model IEnumerable<TrashToRewardsV2.Models.PHANTHUONG>
+
+@{
+    ViewData["Title"] = "Danh sách Phần Thưởng";
+}
+
+<div class="container py-5">
+    <div class="bg-white bg-opacity-75 rounded p-4 shadow-sm mb-4">
+        <div class="row mb-4">
+            <div class="col-md-8 mx-auto text-center">
+                <h2 class="fw-bold mb-3 text-success">Danh sách Phần Thưởng</h2>
+                <p class="lead text-muted">Đổi điểm của bạn với các phần quà hấp dẫn</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        @foreach (var item in Model)
+        {
+            <div class="col">
+                <div class="card border-0 shadow-sm h-100 hover-card">
+                    <div class="position-relative">
+                        <img src="~/images/@item.HinhAnh" class="card-img-top" alt="@item.TenQua" style="height: 220px; object-fit: cover;">
+                        <div class="position-absolute top-0 end-0 m-2">
+                            <span class="badge bg-success rounded-pill px-3 py-2">@item.DiemDoi điểm</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title text-success">@item.TenQua</h5>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <p class="card-text mb-0"><i class="bi bi-box-seam me-2 text-success"></i><strong>Còn:</strong> @item.SoLuongCon</p>
+                        </div>
+                        <a asp-action="PhanThuongDetails" asp-route-id="@item.MaQua" class="btn btn-outline-success w-100 rounded-pill">
+                            <i class="bi bi-eye me-2"></i>Xem chi tiết
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

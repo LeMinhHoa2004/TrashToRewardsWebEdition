@@ -1,0 +1,81 @@
+﻿@model TrashToRewardsV2.Models.LOAIPHELIEU
+
+@{
+    ViewData["Title"] = "Tạo mới loại phế liệu";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-lg">
+                <div class="card-body p-lg-5 p-4">
+                    <div class="mb-4 text-center">
+                        <i class="bi bi-recycle text-success fs-1"></i>
+                        <h2 class="fw-bold text-success">Tạo mới loại phế liệu</h2>
+                        <p class="text-muted">Thêm một loại phế liệu mới vào hệ thống để thu gom và quy đổi điểm</p>
+                    </div>
+
+                    <form asp-action="CreateScrapType" method="post">
+                        @if (!ViewData.ModelState.IsValid)
+                        {
+                            <div asp-validation-summary="All" class="alert alert-danger" role="alert"></div>
+                        }
+                        <div class="mb-3">
+                            <label asp-for="TenLoai" class="form-label">Tên loại phế liệu</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-tag-fill"></i></span>
+                                <input asp-for="TenLoai" class="form-control" placeholder="Nhập tên loại phế liệu" required />
+                            </div>
+                            <span asp-validation-for="TenLoai" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="DonVi" class="form-label">Đơn vị tính</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-rulers"></i></span>
+                                <input asp-for="DonVi" class="form-control" placeholder="Ví dụ: Kg, Lít, Cái,..." required />
+                            </div>
+                            <span asp-validation-for="DonVi" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="TiLeDiem" class="form-label">Tỉ lệ quy đổi điểm</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-percent"></i></span>
+                                <input asp-for="TiLeDiem" class="form-control" placeholder="Số điểm quy đổi cho mỗi đơn vị" required />
+                            </div>
+                            <span asp-validation-for="TiLeDiem" class="text-danger"></span>
+                            <small class="form-text text-muted">Số điểm người dùng nhận được cho mỗi đơn vị phế liệu</small>
+                        </div>
+
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-success btn-lg rounded-pill">
+                                <i class="bi bi-plus-circle-fill me-2"></i>Tạo loại phế liệu
+                            </button>
+                            <a asp-action="Dashboard" class="btn btn-outline-secondary rounded-pill">
+                                <i class="bi bi-arrow-left me-2"></i>Quay lại Dashboard
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        // Add animation on form elements
+        document.addEventListener('DOMContentLoaded', function() {
+            const formElements = document.querySelectorAll('.card, .form-control, .btn');
+            formElements.forEach((element, index) => {
+                setTimeout(() => {
+                    element.classList.add('visible');
+                }, 100 * index);
+            });
+        });
+    </script>
+}

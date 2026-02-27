@@ -1,0 +1,52 @@
+﻿@model TrashToRewardsV2.Models.THONGBAOND
+@{
+    ViewData["Title"] = "Chi tiết thông báo người dùng";
+}
+
+<div class="container py-4">
+    <div class="bg-white bg-opacity-75 rounded shadow-sm p-4">
+        <h2 class="mb-4 fw-bold text-success">Chi tiết thông báo người dùng</h2>
+
+        <div class="card border-0 shadow-sm hover-card">
+            <div class="card-header bg-light py-3">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-person-fill text-success fs-4 me-2"></i>
+                    <span class="fw-bold">@Model.NGUOIDUNG?.HoTen</span>
+                </div>
+            </div>
+            <div class="card-body p-4">
+                <div class="mb-4">
+                    <h5 class="text-muted mb-3">Nội dung thông báo</h5>
+                    <div class="bg-light p-3 rounded">
+                        @Model.NoiDungND
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="bi bi-calendar-event text-success me-2"></i>
+                            <strong>Ngày tạo:</strong>
+                            <span class="ms-2">@Model.NgayTaoND.ToString("dd/MM/yyyy HH:mm")</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-check-circle-fill @(Model.DaDoc ? "text-success" : "text-secondary") me-2"></i>
+                            <strong>Trạng thái:</strong>
+                            <span class="ms-2 @(Model.DaDoc ? "text-success" : "text-secondary") fw-bold">
+                                @(Model.DaDoc ? "Đã đọc" : "Chưa đọc")
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <a asp-action="ThongBaoND" class="btn btn-outline-secondary px-4 rounded-pill">
+                        <i class="bi bi-arrow-left me-2"></i>Quay lại
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

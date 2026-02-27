@@ -1,0 +1,92 @@
+﻿@model TrashToRewardsV2.Models.NGUOIDUNG
+@{
+    ViewData["Title"] = "Thêm người dùng";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-lg">
+                <div class="card-body p-lg-5 p-4">
+                    <div class="mb-4 text-center">
+                        <i class="bi bi-person-plus-fill text-success fs-1"></i>
+                        <h2 class="fw-bold text-success">Thêm người dùng</h2>
+                        <p class="text-muted">Tạo tài khoản người dùng mới cho hệ thống</p>
+                    </div>
+
+                    <form asp-action="CreateUser" method="post" class="needs-validation">
+                        @if (!ViewData.ModelState.IsValid)
+                        {
+                            <div asp-validation-summary="All" class="alert alert-danger" role="alert"></div>
+                        }
+                        <div class="mb-3">
+                            <label asp-for="HoTen" class="form-label">Họ tên</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-person-fill"></i></span>
+                                <input asp-for="HoTen" class="form-control" placeholder="Nhập họ tên" required />
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label">Email</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-envelope-fill"></i></span>
+                                <input asp-for="Email" class="form-control" type="email" placeholder="Nhập địa chỉ email" required />
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="SDT" class="form-label">Số điện thoại</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-telephone-fill"></i></span>
+                                <input asp-for="SDT" class="form-control" placeholder="Nhập số điện thoại" required />
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="DiaChi" class="form-label">Địa chỉ</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-geo-alt-fill"></i></span>
+                                <input asp-for="DiaChi" class="form-control" placeholder="Nhập địa chỉ" required />
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="MatKhau" class="form-label">Mật khẩu</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-lock-fill"></i></span>
+                                <input asp-for="MatKhau" type="password" class="form-control" placeholder="Nhập mật khẩu" required />
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-success btn-lg rounded-pill">
+                                <i class="bi bi-plus-circle-fill me-2"></i>Thêm người dùng
+                            </button>
+                            <a asp-action="Dashboard" class="btn btn-outline-secondary rounded-pill">
+                                <i class="bi bi-arrow-left me-2"></i>Quay lại Dashboard
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        // Add animation on form elements
+        document.addEventListener('DOMContentLoaded', function () {
+            const formElements = document.querySelectorAll('.card, .form-control, .btn');
+            formElements.forEach((element, index) => {
+                setTimeout(() => {
+                    element.classList.add('visible');
+                }, 100 * index);
+            });
+        });
+    </script>
+}

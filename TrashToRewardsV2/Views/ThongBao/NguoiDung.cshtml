@@ -1,0 +1,105 @@
+﻿@model IEnumerable<TrashToRewardsV2.Models.THONGBAOND>
+
+@{
+    ViewData["Title"] = "Thông báo của tôi";
+}
+
+<!-- Page Header -->
+<div class="container py-4">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="page-title fw-bold text-success">Thông báo của tôi</h2>
+            <p class="lead text-muted">Quản lý tất cả thông báo từ hệ thống cho tài khoản của bạn</p>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="card border-0 shadow-lg mb-5">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center bg-white">
+            <h6 class="m-0 fw-bold text-success">Danh sách thông báo</h6>
+            <button id="btnDanhDauTatCaND" class="btn btn-success btn-sm rounded-pill px-3">
+                <i class="bi bi-check-all me-1"></i>Đánh dấu tất cả đã đọc
+            </button>
+        </div>
+        <div class="card-body p-0">
+            @if (Model.Any())
+            {
+                <div class="list-group list-group-flush" id="ndThongBaoList">
+                    @foreach (var item in Model)
+                    {
+                        <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center border-bottom @(item.DaDoc ? "" : "fw-bold")" data-id="@item.MaTBND">
+                            <div class="py-2">
+                                <div class="d-flex justify-content-between w-100">
+                                    <h5 class="mb-1 @(item.DaDoc ? "text-dark" : "text-success")">Thông báo từ hệ thống</h5>
+                                    <small class="text-muted">@item.NgayTaoND.ToString("dd/MM/yyyy HH:mm")</small>
+                                </div>
+                                <p class="mb-1">@item.NoiDungND</p>
+                                @if (!item.DaDoc)
+                                {
+                                    <span class="badge bg-warning text-dark rounded-pill">Chưa đọc</span>
+                                }
+                            </div>
+                            @if (!item.DaDoc)
+                            {
+                                <button class="btn btn-sm btn-outline-success rounded-circle btn-mark-read-nd" data-id="@item.MaTBND" title="Đánh dấu đã đọc">
+                                    <i class="bi bi-check"></i>
+                                </button>
+                            }
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="empty-state py-5">
+                    <i class="bi bi-bell text-success mb-3"></i>
+                    <p class="text-muted">Bạn không có thông báo nào.</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById("btnDanhDauTatCaND")?.addEventListener("click", function () {
+            fetch("/ThongBao/DanhDauTatCaDaDocND", {
+                method: "POST",
+                headers: {
+                    'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                }
+            }).then(res => {
+                if (res.ok) location.reload();
+            });
+        });
+
+        document.querySelectorAll(".btn-mark-read-nd").forEach(btn => {
+            btn.addEventListener("click", function () {
+                const id = this.getAttribute("data-id");
+                fetch(`/api/ThongBaoAPI/DanhDauDaDocND/${id}`, {
+                    method: "POST",
+                    headers: {
+                        'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                    }
+                }).then(res => {
+                    if (res.ok) location.reload();
+                });
+            });
+        });
+
+        // Add animation on scroll
+        window.addEventListener('scroll', function() {
+            const elements = document.querySelectorAll('.card, .list-group-item');
+
+            elements.forEach(element => {
+                const position = element.getBoundingClientRect();
+
+                // If element is in viewport
+                if (position.top < window.innerHeight && position.bottom >= 0) {
+                    element.classList.add('visible');
+                }
+            });
+        });
+    </script>
+}

@@ -1,0 +1,77 @@
+﻿@model IEnumerable<TrashToRewardsV2.Models.THONGBAOND>
+@{
+    ViewData["Title"] = "Quản lý thông báo người dùng";
+}
+
+<div class="container py-4">
+    <div class="bg-white rounded p-4 shadow-sm mb-4">
+        <h2 class="fw-bold text-success mb-4">Thông báo người dùng</h2>
+
+        <!-- Form gửi thông báo hàng loạt -->
+        <form asp-action="SendBulkToNguoiDung" method="post" class="mb-4">
+            <div class="input-group">
+                <input type="text" name="noiDung" class="form-control rounded-start" placeholder="Nhập nội dung thông báo chung" required />
+                <button type="submit" class="btn btn-success px-4">Gửi tất cả người dùng</button>
+            </div>
+        </form>
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <a asp-action="CreateND" class="btn btn-success">
+                <i class="bi bi-plus-circle me-2"></i>Thêm thông báo mới
+            </a>
+        </div>
+
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="bg-light">
+                            <tr>
+                                <th class="border-0">Người dùng</th>
+                                <th class="border-0">Nội dung</th>
+                                <th class="border-0">Ngày tạo</th>
+                                <th class="border-0">Trạng thái</th>
+                                <th class="border-0 text-center">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var tb in Model)
+                            {
+                                <tr>
+                                    <td>@tb.NGUOIDUNG?.HoTen</td>
+                                    <td>@tb.NoiDungND</td>
+                                    <td>@tb.NgayTaoND.ToString("dd/MM/yyyy HH:mm")</td>
+                                    <td>
+                                        @if (tb.DaDoc)
+                                        {
+                                            <span class="badge bg-success">Đã đọc</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-warning text-dark">Chưa đọc</span>
+                                        }
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="btn-group">
+                                            <a asp-action="DetailsND" asp-route-id="@tb.MaTBND" class="btn btn-sm btn-outline-primary">
+                                                <i class="bi bi-info-circle"></i>
+                                            </a>
+                                            <a asp-action="EditND" asp-route-id="@tb.MaTBND" class="btn btn-sm btn-outline-warning">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            <form asp-action="DeleteND" asp-route-id="@tb.MaTBND" method="post" class="d-inline" onsubmit="return confirm('Bạn chắc chắn muốn xóa?');">
+                                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

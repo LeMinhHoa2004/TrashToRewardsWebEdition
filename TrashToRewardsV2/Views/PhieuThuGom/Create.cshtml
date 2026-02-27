@@ -1,0 +1,248 @@
+﻿@model TrashToRewardsV2.ViewModels.PhieuThuGomViewModel
+@using TrashToRewardsV2.Models
+
+@{
+    ViewData["Title"] = "Lập phiếu thu gom";
+    var datLich = Model.PhieuDatLich;
+    var loaiPheLieuList = ViewBag.LoaiPheLieuList as List<LOAIPHELIEU>;
+    bool hasPhieuDatLich = datLich != null;
+}
+
+<div class="container py-5">
+    <div class="bg-white bg-opacity-75 rounded shadow p-4 mb-4">
+        <h2 class="page-title fw-bold text-success">Lập phiếu thu gom</h2>
+        <p class="text-muted lead">Vui lòng nhập thông tin chi tiết về phế liệu thu gom</p>
+    </div>
+
+    @if (TempData["Debug"] != null)
+    {
+        <div class="alert alert-info shadow-sm fade show">
+            <i class="bi bi-info-circle-fill me-2"></i>
+            @TempData["Debug"]
+        </div>
+    }
+
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-danger shadow-sm">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            Dữ liệu không hợp lệ. Vui lòng kiểm tra lại.
+        </div>
+    }
+
+    @if (!hasPhieuDatLich)
+    {
+        <div class="alert alert-warning shadow-sm">
+            <i class="bi bi-exclamation-circle-fill me-2"></i>
+            Không tìm thấy thông tin phiếu đặt lịch tương ứng.
+        </div>
+    }
+    else
+    {
+        <div class="card border-0 shadow-sm hover-card mb-4 visible">
+            <div class="card-header bg-success text-white py-3">
+                <h5 class="mb-0"><i class="bi bi-calendar-check me-2"></i>Thông tin phiếu đặt lịch</h5>
+            </div>
+            <div class="card-body p-4">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <p><strong><i class="bi bi-hash text-success me-2"></i>Mã phiếu:</strong> @datLich.MaPhieuDL</p>
+                        <p><strong><i class="bi bi-calendar-date text-success me-2"></i>Ngày đặt lịch:</strong> @datLich.NgayDL.ToString("dd/MM/yyyy HH:mm")</p>
+                        <p><strong><i class="bi bi-geo-alt text-success me-2"></i>Địa điểm thu gom:</strong> @datLich.DiaDiemDL</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong><i class="bi bi-person text-success me-2"></i>Người đặt lịch:</strong> @datLich.NGUOIDUNG?.HoTen</p>
+                        <p><strong><i class="bi bi-house text-success me-2"></i>Địa chỉ:</strong> @datLich.NGUOIDUNG?.DiaChi</p>
+                    </div>
+                </div>
+                <p>
+                    <strong><i class="bi bi-check-circle text-success me-2"></i>Trạng thái:</strong>
+                    @switch (datLich.TrangThaiDL)
+                    {
+                        case "ChuaXacNhan":
+                            <span class="badge bg-warning">Chưa xác nhận</span>
+                            break;
+                        case "DaXacNhan":
+                            <span class="badge bg-info">Đã xác nhận</span>
+                            break;
+                        case "DaXuLy":
+                            <span class="badge bg-success">Đã xử lý</span>
+                            break;
+                        case "DaHuy":
+                            <span class="badge bg-danger">Đã hủy</span>
+                            break;
+                    }
+                </p>
+            </div>
+        </div>
+
+        <form asp-action="Create" method="post">
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div asp-validation-summary="All" class="alert alert-danger shadow-sm" role="alert"></div>
+            }
+            <!-- Gửi mã phiếu đặt lịch qua binding riêng -->
+            <input type="hidden" name="MaPhieuDL" value="@datLich.MaPhieuDL" />
+            <input type="hidden" asp-for="PhieuThuGom.MaXN" />
+
+            <div class="card border-0 shadow-sm hover-card mb-4 visible">
+                <div class="card-header bg-success text-white py-3">
+                    <h5 class="mb-0"><i class="bi bi-recycle me-2"></i>Chi tiết phế liệu thu gom</h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="table-responsive mb-4">
+                        <table class="table" id="chiTietTable">
+                            <thead>
+                                <tr>
+                                    <th>Loại phế liệu</th>
+                                    <th>Khối lượng</th>
+                                    <th>Điểm</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+
+                    <div class="card card-success border-0 shadow-sm mb-4 p-3">
+                        <div class="row g-2 align-items-end">
+                            <div class="col-md-5">
+                                <label for="loaiPL" class="form-label text-success fw-bold"><i class="bi bi-tag me-1"></i>Loại phế liệu</label>
+                                <select class="form-select form-select-lg" id="loaiPL">
+                                    <option disabled selected>-- Chọn loại phế liệu --</option>
+                                    @foreach (var item in loaiPheLieuList)
+                                    {
+                                        <option value="@item.MaLoaiPL" data-tyle="@item.TiLeDiem" data-donvi="@item.DonVi">@item.TenLoai</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="khoiLuong" class="form-label text-success fw-bold"><i class="bi bi-speedometer me-1"></i>Khối lượng</label>
+                                <input type="number" min="0.1" step="0.1" class="form-control form-control-lg" id="khoiLuong" placeholder="Nhập khối lượng">
+                            </div>
+                            <div class="col-md-3">
+                                <button type="button" class="btn btn-success btn-lg w-100" id="btnAddChiTiet">
+                                    <i class="bi bi-plus-circle me-2"></i>Thêm
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card bg-light border-0 p-3 mb-4">
+                        <div class="text-end">
+                            <h5>Tổng điểm thu gom: <span class="badge bg-success fs-5" id="tongDiemView">0</span></h5>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-4">
+                        <a asp-action="Index" class="btn btn-outline-secondary btn-lg">
+                            <i class="bi bi-arrow-left me-2"></i>Quay lại
+                        </a>
+                        <button type="submit" class="btn btn-success btn-lg px-4 rounded-pill">
+                            <i class="bi bi-save me-2"></i>Lưu phiếu thu gom
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        const chiTietTable = document.querySelector("#chiTietTable tbody");
+        const tongDiemView = document.getElementById("tongDiemView");
+        const selectedLoaiPL = new Set();
+        let tongDiem = 0;
+
+        // Add animation on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const elements = document.querySelectorAll('.card');
+            elements.forEach(element => {
+                element.classList.add('visible');
+            });
+        });
+
+        document.getElementById("btnAddChiTiet").addEventListener("click", () => {
+            const select = document.getElementById("loaiPL");
+            const khoiLuong = parseFloat(document.getElementById("khoiLuong").value);
+            const ma = select.value;
+            const ten = select.options[select.selectedIndex].text;
+            const tyle = parseFloat(select.options[select.selectedIndex].dataset.tyle);
+            const donvi = select.options[select.selectedIndex].dataset.donvi;
+            const diem = khoiLuong * tyle;
+
+            if (!ma || isNaN(khoiLuong) || khoiLuong <= 0 || selectedLoaiPL.has(ma)) {
+                // Show validation alert
+                const alertDiv = document.createElement('div');
+                alertDiv.className = 'alert alert-warning alert-dismissible fade show';
+                alertDiv.innerHTML = `
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    Vui lòng chọn loại phế liệu và nhập khối lượng hợp lệ
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                `;
+
+                const form = document.querySelector('form');
+                form.insertBefore(alertDiv, form.firstChild);
+
+                setTimeout(() => {
+                    alertDiv.classList.remove('show');
+                    setTimeout(() => alertDiv.remove(), 300);
+                }, 3000);
+
+                return;
+            }
+
+            selectedLoaiPL.add(ma);
+            tongDiem += diem;
+
+            const row = document.createElement("tr");
+            row.className = "hover-card-row";
+            row.innerHTML = `
+                <td>
+                    <input type="hidden" name="maLoaiPL" value="${ma}" />
+                    <i class="bi bi-recycle text-success me-2"></i>${ten}
+                </td>
+                <td>
+                    <input type="hidden" name="khoiLuong" value="${khoiLuong}" />
+                    <span class="fw-bold">${khoiLuong}</span> ${donvi}
+                </td>
+                <td><span class="badge bg-success">${diem.toFixed(2)}</span></td>
+                <td>
+                    <button type="button" class="btn btn-outline-danger btn-sm"
+                            onclick="removeRow(this, '${ma}', ${diem})">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </td>
+            `;
+
+            chiTietTable.appendChild(row);
+            tongDiemView.textContent = tongDiem.toFixed(2);
+
+            // Clear inputs
+            document.getElementById("khoiLuong").value = '';
+            select.selectedIndex = 0;
+
+            // Animate row
+            setTimeout(() => {
+                row.classList.add('visible');
+            }, 10);
+        });
+
+        function removeRow(button, ma, diem) {
+            const row = button.closest("tr");
+            row.classList.remove('visible');
+
+            // Fade out animation before removal
+            row.style.opacity = '0';
+            row.style.transform = 'translateY(20px)';
+
+            setTimeout(() => {
+                row.remove();
+                selectedLoaiPL.delete(ma);
+                tongDiem -= diem;
+                tongDiemView.textContent = tongDiem.toFixed(2);
+            }, 300);
+        }
+    </script>
+}

@@ -1,0 +1,44 @@
+﻿@model TrashToRewardsV2.Models.ADMIN
+@{
+    ViewData["Title"] = "Chi tiết Admin";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-lg">
+                <div class="card-body p-lg-5 p-4">
+                    <div class="d-flex align-items-center mb-4">
+                        <i class="bi bi-shield-fill text-success fs-1 me-3"></i>
+                        <h2 class="fw-bold text-success mb-0">Chi tiết Admin</h2>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <dl class="row">
+                        <dt class="col-sm-3 fw-semibold"><i class="bi bi-person-fill text-success me-2"></i>Họ tên:</dt>
+                        <dd class="col-sm-9">@Model.HoTenAD</dd>
+
+                        <dt class="col-sm-3 fw-semibold"><i class="bi bi-envelope-fill text-success me-2"></i>Email:</dt>
+                        <dd class="col-sm-9">@Model.EmailAD</dd>
+
+                        <dt class="col-sm-3 fw-semibold"><i class="bi bi-telephone-fill text-success me-2"></i>Số điện thoại:</dt>
+                        <dd class="col-sm-9">@Model.SDTAD</dd>
+                    </dl>
+
+                    <div class="text-center mt-4">
+                        <a asp-action="Dashboard" class="btn btn-outline-success rounded-pill px-4">
+                            <i class="bi bi-arrow-left me-2"></i>Quay lại Dashboard
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

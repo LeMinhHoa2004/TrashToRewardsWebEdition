@@ -1,0 +1,77 @@
+﻿@model PHIEUTHUGOM
+
+@{
+    ViewData["Title"] = "Chi tiết phiếu thu gom";
+    var phieu = Model;
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4 text-primary text-center">Chi tiết phiếu thu gom</h2>
+
+    <div class="card shadow-sm mb-4 hover-card">
+        <div class="card-header bg-info text-white fw-bold">
+            <i class="bi bi-info-circle me-2"></i>Thông tin phiếu
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <p><i class="bi bi-receipt me-2 text-success"></i><strong>Mã phiếu:</strong> @phieu.MaPhieu</p>
+                    <p><i class="bi bi-person me-2 text-success"></i><strong>Khách hàng:</strong> @phieu.XACNHAN?.PHIEUDATLICH?.NGUOIDUNG?.HoTen</p>
+                    <p><i class="bi bi-geo-alt me-2 text-success"></i><strong>Địa chỉ:</strong> @phieu.XACNHAN?.PHIEUDATLICH?.DiaDiemDL</p>
+                    <p><i class="bi bi-calendar-check me-2 text-success"></i><strong>Ngày thu gom:</strong> @phieu.XACNHAN?.PHIEUDATLICH?.NgayDL.ToString("dd/MM/yyyy HH:mm")</p>
+                </div>
+                <div class="col-md-6">
+                    <p><i class="bi bi-person-badge me-2 text-success"></i><strong>Nhân viên xác nhận:</strong> @phieu.XACNHAN?.NHANVIEN?.HoTenNV</p>
+                    <p><i class="bi bi-clock-history me-2 text-success"></i><strong>Thời gian xác nhận:</strong> @phieu.XACNHAN?.NgayXN.ToString("dd/MM/yyyy HH:mm")</p>
+                    <p><i class="bi bi-person-check me-2 text-success"></i><strong>Nhân viên thực hiện:</strong> @phieu.NHANVIEN?.HoTenNV</p>
+                    <p><i class="bi bi-award me-2 text-success"></i><strong>Tổng điểm nhận:</strong> <span class="fw-bold text-success">@phieu.TongDiem</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm hover-card">
+        <div class="card-header bg-success text-white fw-bold">
+            <i class="bi bi-recycle me-2"></i>Chi tiết phế liệu thu gom
+        </div>
+        <div class="card-body">
+            @if (phieu.CTPHIEUTHUGOMs != null && phieu.CTPHIEUTHUGOMs.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-striped align-middle">
+                        <thead>
+                            <tr>
+                                <th>Loại phế liệu</th>
+                                <th>Khối lượng</th>
+                                <th>Điểm nhận</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var ct in phieu.CTPHIEUTHUGOMs)
+                            {
+                                <tr>
+                                    <td>
+                                        <i class="bi bi-box-seam me-2 text-success"></i>
+                                        @ct.LOAIPHELIEU?.TenLoai
+                                    </td>
+                                    <td>@ct.KhoiLuong @ct.LOAIPHELIEU?.DonVi</td>
+                                    <td class="text-success fw-bold">@ct.SoDiemNhanDuoc</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <p class="text-muted">Không có chi tiết phế liệu.</p>
+            }
+
+            <div class="mt-3">
+                <a asp-action="PhieuThuGom" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left-circle me-1"></i> Quay lại danh sách
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

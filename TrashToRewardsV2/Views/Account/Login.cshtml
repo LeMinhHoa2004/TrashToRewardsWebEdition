@@ -1,0 +1,70 @@
+﻿@{
+    ViewData["Title"] = "Đăng nhập";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card border-0 shadow-lg">
+                <div class="card-body p-lg-5 p-4">
+                    <h2 class="text-center text-success fw-bold mb-4">Đăng nhập</h2>
+
+                    <form asp-action="Login" method="post">
+                        @if (ViewBag.Error != null)
+                        {
+                            <div class="alert alert-danger">@ViewBag.Error</div>
+                        }
+
+                        <div class="mb-4">
+                            <div class="form-floating">
+                                <input type="email" name="email" class="form-control" id="emailInput" placeholder="Nhập email" required />
+                                <label for="emailInput">Email</label>
+                            </div>
+                        </div>
+
+                        <div class="mb-4 position-relative">
+                            <div class="form-floating">
+                                <input type="password" name="password" class="form-control" id="passwordInput" placeholder="Nhập mật khẩu" required />
+                                <label for="passwordInput">Mật khẩu</label>
+                            </div>
+                            <span class="position-absolute top-50 end-0 translate-middle-y me-3" style="cursor: pointer;" onclick="togglePassword()">
+                                <i class="bi bi-eye"></i>
+                            </span>
+                        </div>
+
+                        <div class="d-grid mb-4">
+                            <button type="submit" class="btn btn-success btn-lg rounded-pill fw-bold">Đăng nhập</button>
+                        </div>
+
+                        <div class="text-center">
+                            <a href="/Account/ForgotPassword" class="text-success">Quên mật khẩu?</a>
+                        </div>
+                    </form>
+
+                    <div class="text-center mt-4">
+                        <p class="mb-0">Bạn chưa có tài khoản? <a href="/Account/Register" class="text-success fw-bold">Đăng ký ngay</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function togglePassword() {
+            const input = document.getElementById('passwordInput');
+            const icon = event.currentTarget.querySelector('i');
+
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('bi-eye');
+                icon.classList.add('bi-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('bi-eye-slash');
+                icon.classList.add('bi-eye');
+            }
+        }
+    </script>
+}

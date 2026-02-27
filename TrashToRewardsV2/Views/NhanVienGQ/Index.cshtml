@@ -1,0 +1,72 @@
+﻿@model IEnumerable<TrashToRewardsV2.Models.NHANVIENGQ>
+
+@{
+    ViewData["Title"] = "Danh sách nhân viên giao quà";
+}
+
+<div class="container py-4">
+    <div class="bg-white bg-opacity-75 rounded p-4 mb-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <h2 class="fw-bold text-success mb-0">Danh sách nhân viên giao quà</h2>
+            <a asp-action="Create" class="btn btn-success px-4 py-2 rounded-pill fw-bold">
+                <i class="bi bi-plus-circle me-2"></i>Thêm nhân viên
+            </a>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-lg">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="bg-success text-white">
+                        <tr>
+                            <th class="py-3">Mã NVGQ</th>
+                            <th class="py-3">Họ tên</th>
+                            <th class="py-3">Email</th>
+                            <th class="py-3">SĐT</th>
+                            <th class="py-3">Kho quản lý</th>
+                            <th class="text-center py-3">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var nv in Model)
+                        {
+                            <tr class="hover-card">
+                                <td class="py-3">@nv.MaNVGQ</td>
+                                <td class="py-3 fw-bold">@nv.HoTenNVGQ</td>
+                                <td class="py-3">@nv.EmailNVGQ</td>
+                                <td class="py-3">@nv.SDTNVGQ</td>
+                                <td class="py-3">@nv.KHOQUA?.TenKQ</td>
+                                <td class="text-center py-3">
+                                    <div class="btn-group" role="group">
+                                        <a asp-action="Details" asp-route-id="@nv.MaNVGQ" class="btn btn-outline-info btn-sm" data-bs-toggle="tooltip" title="Xem chi tiết">
+                                            <i class="bi bi-eye-fill"></i>
+                                        </a>
+                                        <a asp-action="EditAdmin" asp-route-id="@nv.MaNVGQ" class="btn btn-outline-warning btn-sm" data-bs-toggle="tooltip" title="Chỉnh sửa">
+                                            <i class="bi bi-pencil-fill"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@nv.MaNVGQ" class="btn btn-outline-danger btn-sm" data-bs-toggle="tooltip" title="Xóa">
+                                            <i class="bi bi-trash-fill"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Initialize tooltips
+        document.addEventListener('DOMContentLoaded', function() {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            });
+        });
+    </script>
+}

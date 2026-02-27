@@ -1,0 +1,65 @@
+﻿@model TrashToRewardsV2.Models.LOAIPHELIEU
+
+@{
+    ViewData["Title"] = "Chi tiết Loại Phế Liệu";
+}
+
+<div class="container py-5">
+    <div class="bg-white bg-opacity-75 rounded p-4 mb-4">
+        <div class="row mb-3">
+            <div class="col-md-8">
+                <h2 class="fw-bold text-success mb-3">Chi tiết Loại Phế Liệu</h2>
+                <p class="lead text-muted">Thông tin chi tiết về loại phế liệu và giá trị quy đổi</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm hover-card mb-4">
+        <div class="card-body p-4">
+            <div class="row">
+                <div class="col-md-4 mb-4 mb-md-0">
+                    <div class="bg-success bg-opacity-10 p-4 text-center rounded mb-3">
+                        @{
+                            string icon = "bi-box-seam";
+                            if (Model.TenLoai.ToLower().Contains("nhựa")) { icon = "bi-cup-straw"; }
+                            else if (Model.TenLoai.ToLower().Contains("giấy")) { icon = "bi-newspaper"; }
+                            else if (Model.TenLoai.ToLower().Contains("pin") || Model.TenLoai.ToLower().Contains("điện")) { icon = "bi-battery-charging"; }
+                            else if (Model.TenLoai.ToLower().Contains("kim loại") || Model.TenLoai.ToLower().Contains("nhôm")) { icon = "bi-box-seam"; }
+                            else if (Model.TenLoai.ToLower().Contains("thủy tinh")) { icon = "bi-cup-hot"; }
+                            else { icon = "bi-tools"; }
+                        }
+                        <i class="bi @icon text-success fs-1 mb-3"></i>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <h3 class="text-success fw-bold mb-4">@Model.TenLoai</h3>
+                    <div class="row mb-3">
+                        <div class="col-md-6 mb-3">
+                            <div class="card border-0 bg-light">
+                                <div class="card-body">
+                                    <h6 class="text-muted mb-2">Đơn vị tính</h6>
+                                    <h5 class="mb-0 fw-bold">@Model.DonVi</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="card border-0 bg-light">
+                                <div class="card-body">
+                                    <h6 class="text-muted mb-2">Tỉ lệ điểm</h6>
+                                    <h5 class="mb-0 fw-bold text-success">@Model.TiLeDiem</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-muted mb-4">Mỗi @Model.DonVi @Model.TenLoai sẽ được quy đổi thành @Model.TiLeDiem điểm thưởng trong hệ thống.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-end">
+        <a asp-action="Index" class="btn btn-outline-success rounded-pill px-4">
+            <i class="bi bi-arrow-left me-2"></i> Quay lại danh sách
+        </a>
+    </div>
+</div>

@@ -1,0 +1,124 @@
+﻿@model IEnumerable<PHIEUDATLICH>
+
+@{
+    ViewData["Title"] = "Danh sách phiếu đặt lịch";
+}
+
+<div class="container py-5">
+    <div class="row align-items-center mb-4">
+        <div class="col">
+            <h2 class="text-success fw-bold"><i class="bi bi-calendar-week me-2"></i>Danh sách phiếu đặt lịch</h2>
+        </div>
+    </div>
+
+    @* Hiển thị thông báo *@
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger d-flex align-items-center">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            <div>@TempData["Error"]</div>
+        </div>
+    }
+
+    <div class="card border-0 shadow-lg">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="bg-success text-white">
+                        <tr>
+                            <th class="px-4 py-3"><i class="bi bi-upc me-2"></i>Mã phiếu</th>
+                            <th class="px-4 py-3"><i class="bi bi-person me-2"></i>Khách hàng</th>
+                            <th class="px-4 py-3"><i class="bi bi-calendar-event me-2"></i>Ngày đặt lịch</th>
+                            <th class="px-4 py-3"><i class="bi bi-geo-alt me-2"></i>Địa điểm thu gom</th>
+                            <th class="px-4 py-3"><i class="bi bi-star me-2"></i>Trạng thái</th>
+                            <th class="px-4 py-3"><i class="bi bi-tools me-2"></i>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr class="hover-card">
+                                <td class="px-4 py-3">@item.MaPhieuDL</td>
+                                <td class="px-4 py-3">@item.NGUOIDUNG.HoTen</td>
+                                <td class="px-4 py-3">@item.NgayDL.ToString("dd/MM/yyyy HH:mm")</td>
+                                <td class="px-4 py-3">@item.DiaDiemDL</td>
+                                <td class="px-4 py-3">
+                                    @switch (item.TrangThaiDL)
+                                    {
+                                        case "ChuaXacNhan":
+                                            <span class="badge bg-warning p-2"><i class="bi bi-hourglass-split me-1"></i>Chưa xác nhận</span>
+                                            break;
+                                        case "DaXacNhan":
+                                            <span class="badge bg-info p-2"><i class="bi bi-check-circle me-1"></i>Đã xác nhận</span>
+                                            break;
+                                        case "DaXuLy":
+                                            <span class="badge bg-success p-2"><i class="bi bi-check-circle-fill me-1"></i>Đã xử lý</span>
+                                            break;
+                                        case "DaHuy":
+                                            <span class="badge bg-danger p-2"><i class="bi bi-x-circle me-1"></i>Đã hủy</span>
+                                            break;
+                                    }
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div class="btn-group" role="group">
+                                        <a asp-action="Details" asp-route-id="@item.MaPhieuDL" class="btn btn-sm btn-outline-success">
+                                            <i class="bi bi-info-circle"></i> Chi tiết
+                                        </a>
+
+                                        @if (item.TrangThaiDL == "ChuaXacNhan")
+                                        {
+                                            <form asp-action="Confirm" asp-route-id="@item.MaPhieuDL" method="post">
+                                                <button type="submit" class="btn btn-sm btn-outline-primary ms-1">
+                                                    <i class="bi bi-check-circle"></i> Xác nhận
+                                                </button>
+                                            </form>
+                                        }
+
+                                        @if (item.TrangThaiDL == "DaXacNhan")
+                                        {
+                                            <a asp-controller="PhieuThuGom" asp-action="Create" asp-route-maPhieuDL="@item.MaPhieuDL" class="btn btn-sm btn-outline-info ms-1">
+                                                <i class="bi bi-receipt"></i> Lập phiếu
+                                            </a>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            @if (!Model.Any())
+            {
+                <div class="text-center p-5">
+                    <i class="bi bi-calendar-x text-muted" style="font-size: 4rem;"></i>
+                    <p class="text-muted mt-3">Chưa có phiếu đặt lịch nào</p>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm bg-light">
+                <div class="card-body p-4">
+                    <h5><i class="bi bi-question-circle-fill text-success me-2"></i>Trợ giúp</h5>
+                    <ul class="mb-0 ps-4">
+                        <li class="mb-2">Phiếu <span class="badge bg-warning">Chưa xác nhận</span> cần được xác nhận bởi nhân viên</li>
+                        <li class="mb-2">Phiếu <span class="badge bg-info">Đã xác nhận</span> sẵn sàng để lập phiếu thu gom</li>
+                        <li class="mb-2">Phiếu <span class="badge bg-success">Đã xử lý</span> đã hoàn thành quy trình thu gom</li>
+                        <li>Phiếu <span class="badge bg-danger">Đã hủy</span> đã bị hủy bỏ</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mt-3 mt-md-0">
+            <div class="card border-0 shadow-sm bg-success text-white">
+                <div class="card-body p-4">
+                    <h5><i class="bi bi-lightbulb-fill me-2"></i>Lưu ý</h5>
+                    <p class="mb-0">Hãy kiểm tra và xác nhận các phiếu đặt lịch mới thường xuyên để đảm bảo dịch vụ thu gom phế liệu được thực hiện kịp thời và hiệu quả.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

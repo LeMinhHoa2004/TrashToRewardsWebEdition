@@ -1,0 +1,73 @@
+﻿@model TrashToRewardsV2.Models.KHOQUA
+
+@{
+    ViewData["Title"] = "Chi tiết Kho Quà";
+}
+
+<div class="container py-5">
+    <div class="bg-white bg-opacity-75 rounded p-4 shadow-sm">
+        <div class="row mb-4">
+            <div class="col-md-8 mx-auto text-center">
+                <h2 class="fw-bold mb-3 text-success">Chi tiết Kho Quà</h2>
+                <p class="lead text-muted">Thông tin và phần thưởng có sẵn</p>
+            </div>
+        </div>
+
+        <div class="card border-0 shadow-sm mb-4 p-3">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><i class="bi bi-shop text-success me-2"></i><strong>Tên kho:</strong> @Model.TenKQ</p>
+                        <p><i class="bi bi-geo-alt text-success me-2"></i><strong>Địa chỉ:</strong> @Model.DiaChiKQ</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><i class="bi bi-telephone text-success me-2"></i><strong>Số điện thoại:</strong> @Model.SDTKQ</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h4 class="mb-3 text-success fw-bold"><i class="bi bi-gift me-2"></i>Danh sách phần thưởng trong kho</h4>
+
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-success">
+                    <tr>
+                        <th style="width: 150px;">Hình ảnh</th>
+                        <th>Tên phần thưởng</th>
+                        <th>Số lượng còn</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var ct in Model.CTKHOQUAs)
+                    {
+                        <tr class="hover-card">
+                            <td style="width: 150px;">
+                                @if (!string.IsNullOrEmpty(ct.PHANTHUONG?.HinhAnh))
+                                {
+                                    <img src="~/images/@ct.PHANTHUONG.HinhAnh" class="img-thumbnail rounded" style="height: 100px; object-fit: cover;" alt="@ct.PHANTHUONG.TenQua" />
+                                }
+                                else
+                                {
+                                    <div class="text-center p-2 bg-light rounded">
+                                        <i class="bi bi-image text-muted" style="font-size: 2rem;"></i>
+                                    </div>
+                                }
+                            </td>
+                            <td class="align-middle"><strong>@ct.PHANTHUONG?.TenQua</strong></td>
+                            <td class="align-middle">
+                                <span class="badge bg-success rounded-pill">@ct.SoLuongTrongKho</span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="text-center mt-4">
+            <a asp-action="KhoQua" class="btn btn-outline-success rounded-pill px-4">
+                <i class="bi bi-arrow-left me-2"></i>Quay lại danh sách kho quà
+            </a>
+        </div>
+    </div>
+</div>

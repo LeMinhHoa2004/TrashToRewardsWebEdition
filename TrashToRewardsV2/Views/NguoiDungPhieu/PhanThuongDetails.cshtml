@@ -1,0 +1,79 @@
+﻿@model TrashToRewardsV2.Models.PHANTHUONG
+
+@{
+    ViewData["Title"] = "Chi tiết Phần Thưởng";
+}
+
+<div class="container py-5">
+    <div class="bg-white bg-opacity-75 rounded p-4 shadow-sm">
+        <div class="row mb-4">
+            <div class="col-md-8 mx-auto text-center">
+                <h2 class="fw-bold mb-3 text-success">Chi tiết Phần Thưởng</h2>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-5 mb-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <img src="~/images/@Model.HinhAnh" class="card-img-top img-fluid rounded" alt="@Model.TenQua"
+                         style="height: 300px; object-fit: contain;">
+                    <div class="card-body text-center">
+                        <span class="badge bg-success rounded-pill px-4 py-2 fs-5">@Model.DiemDoi điểm</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-7">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <h3 class="card-title text-success mb-4">@Model.TenQua</h3>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <p><i class="bi bi-box-seam text-success me-2"></i><strong>Số lượng còn:</strong> @Model.SoLuongCon</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><i class="bi bi-coin text-success me-2"></i><strong>Điểm đổi:</strong> @Model.DiemDoi</p>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <h5 class="text-success"><i class="bi bi-info-circle me-2"></i>Mô tả:</h5>
+                            <p class="card-text">@Model.MoTa</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <h4 class="text-success fw-bold mb-3"><i class="bi bi-shop me-2"></i>Phân bổ ở các Kho Quà</h4>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-success">
+                        <tr>
+                            <th>Tên Kho</th>
+                            <th>Số lượng trong kho</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var ct in Model.CTKHOQUAs)
+                        {
+                            <tr class="hover-card">
+                                <td><strong>@ct.KHOQUA?.TenKQ</strong></td>
+                                <td>
+                                    <span class="badge bg-success rounded-pill">@ct.SoLuongTrongKho</span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <a asp-action="PhanThuong" class="btn btn-outline-success rounded-pill px-4">
+                <i class="bi bi-arrow-left me-2"></i>Quay lại danh sách các phần quà
+            </a>
+        </div>
+    </div>
+</div>

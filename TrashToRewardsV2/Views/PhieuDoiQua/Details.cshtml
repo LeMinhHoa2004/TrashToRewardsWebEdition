@@ -1,0 +1,167 @@
+﻿@model TrashToRewardsV2.Models.PHIEUDOIQUA
+
+@{
+    ViewData["Title"] = "Chi tiết Phiếu Đổi Quà";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-lg">
+                <div class="card-header bg-success text-white p-3 text-center">
+                    <h2 class="mb-0 fw-bold">Chi tiết Phiếu Đổi Quà #@Model.MaPDQ</h2>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-3">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-light rounded-circle p-3 me-3">
+                                    <i class="bi bi-calendar-event text-success fs-4"></i>
+                                </div>
+                                <div>
+                                    <h6 class="text-muted mb-1">Ngày giờ đổi</h6>
+                                    <p class="fw-bold mb-0">@Model.NgayGioDoi.ToString("dd/MM/yyyy HH:mm")</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-light rounded-circle p-3 me-3">
+                                    <i class="bi bi-gem text-success fs-4"></i>
+                                </div>
+                                <div>
+                                    <h6 class="text-muted mb-1">Điểm sử dụng</h6>
+                                    <p class="fw-bold mb-0">@Model.SoDiemSuDung điểm</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-light rounded-circle p-3 me-3">
+                                    <i class="bi bi-truck text-success fs-4"></i>
+                                </div>
+                                <div>
+                                    <h6 class="text-muted mb-1">Hình thức nhận</h6>
+                                    <p class="fw-bold mb-0">@(Model.HinhThucNhanQua == "TaiNha" ? "Tại nhà" : "Trực tiếp")</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-light rounded-circle p-3 me-3">
+                                    <i class="bi bi-check-circle text-success fs-4"></i>
+                                </div>
+                                <div>
+                                    <h6 class="text-muted mb-1">Trạng thái</h6>
+                                    <p class="fw-bold mb-0">
+                                        @{
+                                            string badgeClass = "bg-secondary";
+                                            string displayText = Model.TrangThai;
+                                            string iconClass = "bi-info-circle"; // icon mặc định
+
+                                            switch (Model.TrangThai)
+                                            {
+                                                case "ChuaXacNhan":
+                                                    badgeClass = "bg-warning text-dark";
+                                                    displayText = "Chưa xác nhận";
+                                                    iconClass = "bi-hourglass-split";
+                                                    break;
+                                                case "DaXacNhan":
+                                                    badgeClass = "bg-primary";
+                                                    displayText = "Đã xác nhận";
+                                                    iconClass = "bi-check-circle";
+                                                    break;
+                                                case "DangGiao":
+                                                    badgeClass = "bg-info text-dark";
+                                                    displayText = "Đang giao";
+                                                    iconClass = "bi-truck";
+                                                    break;
+                                                case "DaGiao":
+                                                    badgeClass = "bg-success";
+                                                    displayText = "Đã giao";
+                                                    iconClass = "bi-box-seam";
+                                                    break;
+                                                case "ChuaNhan":
+                                                    badgeClass = "bg-info text-dark";
+                                                    displayText = "Chưa nhận";
+                                                    iconClass = "bi-clock";
+                                                    break;
+                                                case "DaNhan":
+                                                    badgeClass = "bg-success";
+                                                    displayText = "Đã nhận";
+                                                    iconClass = "bi-check-lg";
+                                                    break;
+                                                case "DaHuy":
+                                                    badgeClass = "bg-danger";
+                                                    displayText = "Đã hủy";
+                                                    iconClass = "bi-x-circle";
+                                                    break;
+                                                default:
+                                                    badgeClass = "bg-secondary";
+                                                    displayText = Model.TrangThai;
+                                                    iconClass = "bi-question-circle";
+                                                    break;
+                                            }
+                                        }
+                                        <span class="badge @badgeClass fs-6 px-3 py-2">
+                                            <i class="bi @iconClass me-2" style="font-size:1.1rem;"></i>
+                                            @displayText
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-light rounded-circle p-3 me-3">
+                                <i class="bi bi-geo-alt text-success fs-4"></i>
+                            </div>
+                            <div>
+                                <h6 class="text-muted mb-1">Địa điểm nhận quà</h6>
+                                <p class="fw-bold mb-0">@Model.DiaDiemNhanQua</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="my-4" />
+
+                    <h5 class="text-success mb-3">
+                        <i class="bi bi-gift me-2"></i>
+                        Danh sách phần thưởng đã chọn
+                    </h5>
+                    <div class="card shadow-sm">
+                        <ul class="list-group list-group-flush">
+                            @foreach (var item in Model.CTPHIEUDOIQUAs)
+                            {
+                                <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+                                    <div>
+                                        <span class="badge bg-success rounded-pill me-2">@item.SoLuongDoi</span>
+                                        @item.PHANTHUONG.TenQua
+                                    </div>
+                                    <span class="fw-bold">@item.SoDiemCan điểm</span>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-4">
+                        <a asp-action="Index" class="btn btn-outline-secondary rounded-pill px-4">
+                            <i class="bi bi-arrow-left me-2"></i>Quay lại
+                        </a>
+
+                        @if (Model.TrangThai == "ChuaXacNhan" || Model.TrangThai == "ChuaNhan")
+                        {
+                            <form asp-action="Huy" asp-route-id="@Model.MaPDQ" method="post" class="d-inline">
+                                <button type="submit" class="btn btn-danger rounded-pill px-4">
+                                    <i class="bi bi-x-circle me-2"></i>Hủy phiếu đổi quà
+                                </button>
+                            </form>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

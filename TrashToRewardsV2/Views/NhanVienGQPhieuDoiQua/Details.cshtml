@@ -1,0 +1,128 @@
+﻿@model TrashToRewardsV2.Models.PHIEUDOIQUA
+
+@{
+    ViewData["Title"] = "Chi tiết Phiếu Đổi Quà";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-lg">
+                <div class="card-header bg-success text-white py-3">
+                    <h4 class="mb-0">
+                        <i class="bi bi-gift-fill me-2"></i>Chi tiết Phiếu Đổi Quà #@Model.MaPDQ
+                    </h4>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row mb-4">
+                        <div class="col-md-8">
+                            <dl class="row">
+                                <dt class="col-sm-5 text-success fw-bold">Người dùng:</dt>
+                                <dd class="col-sm-7">@Model.NGUOIDUNG.HoTen</dd>
+
+                                <dt class="col-sm-5 text-success fw-bold">Điểm sử dụng:</dt>
+                                <dd class="col-sm-7">
+                                    <span class="badge bg-success rounded-pill">@Model.SoDiemSuDung điểm</span>
+                                </dd>
+
+                                <dt class="col-sm-5 text-success fw-bold">Hình thức nhận:</dt>
+                                <dd class="col-sm-7">
+                                    @if (Model.HinhThucNhanQua == "TaiNha")
+                                    {
+                                        <i class="bi bi-house-door me-1"></i> <span>Tại nhà</span>
+                                    }
+                                    else
+                                    {
+                                        <i class="bi bi-shop me-1"></i> <span>Trực tiếp</span>
+                                    }
+                                </dd>
+
+                                <dt class="col-sm-5 text-success fw-bold">Địa điểm nhận:</dt>
+                                <dd class="col-sm-7">@Model.DiaDiemNhanQua</dd>
+
+                                <dt class="col-sm-5 text-success fw-bold">Trạng thái:</dt>
+                                <dd class="col-sm-7">
+                                    @switch (Model.TrangThai)
+                                    {
+                                        case "ChuaXacNhan":
+                                            <span class="badge bg-warning rounded-pill">Chưa xác nhận</span>
+                                            break;
+                                        case "DaXacNhan":
+                                            <span class="badge bg-primary rounded-pill">Đã xác nhận</span>
+                                            break;
+                                        case "DangGiao":
+                                            <span class="badge bg-info rounded-pill">Đang giao</span>
+                                            break;
+                                        case "DaGiao":
+                                            <span class="badge bg-success rounded-pill">Đã giao</span>
+                                            break;
+                                        case "ChuaNhan":
+                                            <span class="badge bg-secondary rounded-pill">Đã xác nhận - Chưa nhận</span>
+                                            break;
+                                        case "DaNhan":
+                                            <span class="badge bg-success rounded-pill">Đã nhận</span>
+                                            break;
+                                        case "DaHuy":
+                                            <span class="badge bg-danger rounded-pill">Đã hủy</span>
+                                            break;
+                                        default:
+                                            <span class="badge bg-light text-dark rounded-pill">Không xác định</span>
+                                            break;
+                                    }
+
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <i class="bi bi-gift text-success" style="font-size: 80px;"></i>
+                        </div>
+                    </div>
+
+                    <h5 class="text-success mb-3">
+                        <i class="bi bi-box-seam me-2"></i>Danh sách quà tặng:
+                    </h5>
+                    <div class="card shadow-sm mb-4">
+                        <ul class="list-group list-group-flush">
+                            @foreach (var item in Model.CTPHIEUDOIQUAs)
+                            {
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <i class="bi bi-gift me-2 text-success"></i>
+                                        @item.PHANTHUONG.TenQua
+                                        <span class="badge bg-info rounded-pill ms-2">@item.SoLuongDoi</span>
+                                    </div>
+                                    <div>
+                                        <span class="badge bg-success rounded-pill">@item.SoDiemCan điểm</span>
+                                    </div>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+
+                    <div class="d-flex justify-content-center gap-3 mt-4">
+                        <form asp-action="XacNhan" method="post" asp-route-id="@Model.MaPDQ">
+                            <button type="submit" class="btn btn-success rounded-pill px-4 py-2">
+                                <i class="bi bi-check-circle me-2"></i>Xác nhận / Cập nhật trạng thái
+                            </button>
+                        </form>
+
+                        @if (Model.TrangThai == "ChuaXacNhan" || Model.TrangThai == "ChuaNhan")
+                        {
+                            <form asp-action="Huy" method="post" asp-route-id="@Model.MaPDQ">
+                                <button type="submit" class="btn btn-danger rounded-pill px-4 py-2">
+                                    <i class="bi bi-x-circle me-2"></i>Hủy phiếu
+                                </button>
+                            </form>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <a asp-action="Index" class="btn btn-outline-secondary rounded-pill px-4 py-2">
+                    <i class="bi bi-arrow-left me-2"></i>Quay lại danh sách
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

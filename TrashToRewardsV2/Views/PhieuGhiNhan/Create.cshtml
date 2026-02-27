@@ -1,0 +1,302 @@
+﻿@model TrashToRewardsV2.ViewModels.PhieuGhiNhanViewModel
+@using TrashToRewardsV2.Models
+@{
+    ViewData["Title"] = "Tạo phiếu ghi nhận";
+    var loaiPheLieus = Model.DanhSachLoaiPheLieu;
+    var nguoiDungList = Model.DanhSachNguoiDung.Select(nd => new SelectListItem { Value = nd.MaND.ToString(), Text = nd.HoTen }).ToList();
+}
+
+<div class="container py-4">
+    <div class="bg-white bg-opacity-75 rounded p-4 shadow-sm mb-4">
+        <h2 class="text-success fw-bold mb-4">Tạo phiếu ghi nhận</h2>
+
+        <form asp-action="Create" method="post" id="phieuGhiNhanForm">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div asp-validation-summary="All" class="alert alert-danger" role="alert"></div>
+            }
+
+            <!-- Người dùng selection card -->
+            <div class="card border-0 shadow-sm hover-card mb-4">
+                <div class="card-body p-4">
+                    <h4 class="card-title text-success mb-3">
+                        <i class="bi bi-person-fill me-2"></i>Chọn người dùng
+                    </h4>
+                    <div class="mb-3">
+                        <select class="form-select form-select-lg" name="PhieuGhiNhan.MaND" id="maND" asp-items="nguoiDungList">
+                            <option disabled selected>-- Chọn người dùng --</option>
+                        </select>
+                    </div>
+
+                    <div id="nguoiDungInfo" class="mt-4" style="display: none;">
+                        <div class="card border-success border-start border-5 bg-light">
+                            <div class="card-body">
+                                <h5 class="text-success mb-3">Thông tin người dùng</h5>
+                                <div class="row mb-2">
+                                    <div class="col-md-6">
+                                        <p><i class="bi bi-person me-2"></i><strong>Họ tên:</strong> <span id="hoTenND"></span></p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p><i class="bi bi-envelope me-2"></i><strong>Email:</strong> <span id="emailND"></span></p>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col-md-6">
+                                        <p><i class="bi bi-telephone me-2"></i><strong>SĐT:</strong> <span id="sdtND"></span></p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p><i class="bi bi-geo-alt me-2"></i><strong>Địa chỉ:</strong> <span id="diaChiND"></span></p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <p class="mb-0"><i class="bi bi-star-fill me-2 text-warning"></i><strong>Điểm tích lũy:</strong> <span id="diemND" class="fw-bold text-success"></span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chi tiết ghi nhận card -->
+            <div class="card border-0 shadow-sm hover-card mb-4">
+                <div class="card-body p-4">
+                    <h4 class="card-title text-success mb-3">
+                        <i class="bi bi-list-check me-2"></i>Chi tiết ghi nhận
+                    </h4>
+
+                    <table class="table table-bordered table-hover" id="chiTietTable">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Loại phế liệu</th>
+                                <th>Khối lượng</th>
+                                <th>Điểm</th>
+                                <th width="80"></th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+
+                    <div class="alert alert-light border text-center" id="emptyTableMessage">
+                        <i class="bi bi-info-circle me-2"></i>Chưa có loại phế liệu nào được thêm
+                    </div>
+
+                    <div class="card bg-light mt-4 mb-3">
+                        <div class="card-body">
+                            <h5 class="mb-3 text-muted"><i class="bi bi-plus-circle me-2"></i>Thêm loại phế liệu</h5>
+                            <div class="row g-3">
+                                <div class="col-md-5">
+                                    <select class="form-select" id="loaiPL">
+                                        <option disabled selected>-- Chọn loại phế liệu --</option>
+                                        @foreach (var item in loaiPheLieus)
+                                        {
+                                            <option value="@item.MaLoaiPL" data-tyle="@item.TiLeDiem" data-donvi="@item.DonVi">@item.TenLoai</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        <input type="number" min="0.1" step="0.1" class="form-control" id="khoiLuong" placeholder="Khối lượng">
+                                        <span class="input-group-text bg-light" id="donViDisplay">--</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <button type="button" class="btn btn-success w-100" id="btnAddChiTiet">
+                                        <i class="bi bi-plus-lg me-2"></i>Thêm
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-white">
+                    <div class="d-flex justify-content-end align-items-center">
+                        <h5 class="mb-0">Tổng điểm ghi nhận: <span class="text-success fw-bold" id="tongDiemView">0</span></h5>
+                        <input type="hidden" asp-for="PhieuGhiNhan.TongDiemGN" id="TongDiemGN" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-end mt-4">
+                <a asp-action="Index" class="btn btn-outline-secondary btn-lg me-2">
+                    <i class="bi bi-arrow-left me-2"></i>Quay lại
+                </a>
+                <button type="submit" class="btn btn-success btn-lg px-4">
+                    <i class="bi bi-save me-2"></i>Lưu phiếu ghi nhận
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const chiTietTable = document.querySelector("#chiTietTable tbody");
+        const tongDiemView = document.getElementById("tongDiemView");
+        const inputTongDiem = document.getElementById("TongDiemGN");
+        const selectedLoaiPL = new Set();
+        const emptyTableMessage = document.getElementById("emptyTableMessage");
+        const donViDisplay = document.getElementById("donViDisplay");
+        let tongDiem = 0;
+        let index = 0;
+
+        // Show/hide empty table message
+        function toggleEmptyMessage() {
+            if (chiTietTable.children.length === 0) {
+                emptyTableMessage.style.display = "block";
+            } else {
+                emptyTableMessage.style.display = "none";
+            }
+        }
+
+        toggleEmptyMessage();
+
+        // Update donvi display when selecting loại phế liệu
+        document.getElementById("loaiPL").addEventListener("change", function() {
+            const donvi = this.options[this.selectedIndex].dataset.donvi || "--";
+            donViDisplay.textContent = donvi;
+        });
+
+        document.getElementById("btnAddChiTiet").addEventListener("click", () => {
+            const select = document.getElementById("loaiPL");
+            const khoiLuong = parseFloat(document.getElementById("khoiLuong").value);
+            const ma = select.value;
+            const ten = select.options[select.selectedIndex].text;
+            const tyle = parseFloat(select.options[select.selectedIndex].dataset.tyle);
+            const donvi = select.options[select.selectedIndex].dataset.donvi;
+            const diem = khoiLuong * tyle;
+
+            if (!ma || isNaN(khoiLuong) || khoiLuong <= 0) {
+                alert("Vui lòng chọn loại phế liệu và nhập khối lượng hợp lệ");
+                return;
+            }
+
+            if (selectedLoaiPL.has(ma)) {
+                alert("Loại phế liệu này đã được thêm. Vui lòng chọn loại khác.");
+                return;
+            }
+
+            selectedLoaiPL.add(ma);
+            tongDiem += diem;
+
+            const row = document.createElement("tr");
+            row.className = "animate__animated animate__fadeIn";
+
+            // Dòng chính với input ẩn + hiển thị
+            row.innerHTML = `
+                <td>
+                    <input type="hidden" name="ChiTietPhieuGhiNhan[${index}].MaLoaiPL" value="${ma}" />
+                    ${ten}
+                </td>
+                <td>
+                    <input type="hidden" name="ChiTietPhieuGhiNhan[${index}].KhoiLuongGN" value="${khoiLuong}" />
+                    ${khoiLuong} ${donvi}
+                </td>
+                <td>
+                    <input type="hidden" name="ChiTietPhieuGhiNhan[${index}].SoDiemNhanDuocGN" value="${diem}" />
+                    <span class="text-success fw-bold">${diem.toFixed(2)}</span>
+                </td>
+                <td class="text-center">
+                    <button type="button" class="btn btn-danger btn-sm" onclick="removeRow(this, '${ma}', ${diem})">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </td>
+            `;
+
+            // Index hidden input
+            const indexInput = document.createElement("input");
+            indexInput.type = "hidden";
+            indexInput.name = "ChiTietPhieuGhiNhan.Index";
+            indexInput.value = index;
+            row.appendChild(indexInput);
+
+            chiTietTable.appendChild(row);
+            inputTongDiem.value = tongDiem;
+            tongDiemView.textContent = tongDiem.toFixed(2);
+            index++;
+
+            // Reset inputs
+            document.getElementById("khoiLuong").value = "";
+            select.selectedIndex = 0;
+            donViDisplay.textContent = "--";
+
+            toggleEmptyMessage();
+        });
+
+        function removeRow(button, ma, diem) {
+            const row = button.closest("tr");
+            row.classList.add("animate__animated", "animate__fadeOut");
+
+            setTimeout(() => {
+                row.remove();
+                selectedLoaiPL.delete(ma);
+                tongDiem -= diem;
+                inputTongDiem.value = tongDiem;
+                tongDiemView.textContent = tongDiem.toFixed(2);
+                toggleEmptyMessage();
+            }, 300);
+        }
+
+        document.getElementById("maND")?.addEventListener("change", function () {
+            const maND = this.value;
+            if (!maND) {
+                document.getElementById("nguoiDungInfo").style.display = "none";
+                return;
+            }
+
+            // Show loading indicator
+            document.getElementById("nguoiDungInfo").innerHTML = `
+                <div class="text-center py-4">
+                    <div class="spinner-border text-success" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-2">Đang tải thông tin người dùng...</p>
+                </div>
+            `;
+            document.getElementById("nguoiDungInfo").style.display = "block";
+
+            fetch(`/PhieuGhiNhan/GetNguoiDungInfo?maND=${maND}`)
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById("nguoiDungInfo").innerHTML = `
+                        <div class="card border-success border-start border-5 bg-light">
+                            <div class="card-body">
+                                <h5 class="text-success mb-3">Thông tin người dùng</h5>
+                                <div class="row mb-2">
+                                    <div class="col-md-6">
+                                        <p><i class="bi bi-person me-2"></i><strong>Họ tên:</strong> <span id="hoTenND">${data.hoTen}</span></p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p><i class="bi bi-envelope me-2"></i><strong>Email:</strong> <span id="emailND">${data.email}</span></p>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col-md-6">
+                                        <p><i class="bi bi-telephone me-2"></i><strong>SĐT:</strong> <span id="sdtND">${data.sdt}</span></p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p><i class="bi bi-geo-alt me-2"></i><strong>Địa chỉ:</strong> <span id="diaChiND">${data.diaChi}</span></p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <p class="mb-0"><i class="bi bi-star-fill me-2 text-warning"></i><strong>Điểm tích lũy:</strong> <span id="diemND" class="fw-bold text-success">${data.diem}</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                })
+                .catch(err => {
+                    document.getElementById("nguoiDungInfo").innerHTML = `
+                        <div class="alert alert-danger">
+                            <i class="bi bi-exclamation-triangle me-2"></i>
+                            Không thể tải thông tin người dùng. Vui lòng thử lại.
+                        </div>
+                    `;
+                });
+        });
+    </script>
+}

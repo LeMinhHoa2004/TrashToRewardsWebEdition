@@ -1,0 +1,205 @@
+﻿@model TrashToRewardsV2.Models.PHIEUDOIQUA
+
+@{
+    ViewData["Title"] = "Tạo phiếu đổi quà";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card border-0 shadow-lg">
+                <div class="card-body p-lg-5 p-4">
+                    <h2 class="text-center text-success mb-4">TẠO PHIẾU ĐỔI QUÀ</h2>
+                    <div class="alert alert-primary">
+                        <i class="bi bi-info-circle-fill me-2"></i>
+                        Chọn phần thưởng bạn muốn đổi và điền thông tin nhận quà
+                    </div>
+
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                    <form asp-action="Create" method="post">
+                        @if (!ViewData.ModelState.IsValid)
+                        {
+                            <div asp-validation-summary="All" class="alert alert-danger" role="alert"></div>
+                        }
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Chọn Kho Quà</label>
+                            <select asp-for="MaKQ" class="form-select rounded-pill" id="khoSelect" required>
+                                <option value="">-- Chọn Kho --</option>
+                                @foreach (var kho in (SelectList)ViewBag.KhoList)
+                                {
+                                    <option value="@kho.Value">@kho.Text</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div id="khoInfo" class="alert alert-info rounded-pill mb-4" style="display:none;">
+                            <i class="bi bi-geo-alt-fill me-2"></i>
+                            <span id="khoInfoText"></span>
+                        </div>
+
+                        <div id="quasContainer" class="row gy-4 mb-4">
+                            @* Load quà *@
+                        </div>
+
+                        <hr class="my-4" />
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Hình thức nhận quà</label>
+                            <select asp-for="HinhThucNhanQua" class="form-select rounded-pill" id="hinhThucSelect" required>
+                                <option value="">-- Chọn hình thức --</option>
+                                <option value="TaiNha">Tại nhà</option>
+                                <option value="TrucTiep">Trực tiếp</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-4" id="diaDiemGroup" style="display:none;">
+                            <label class="form-label fw-bold">Địa điểm nhận quà</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-success text-white"><i class="bi bi-geo-alt"></i></span>
+                                <input asp-for="DiaDiemNhanQua" class="form-control" id="diaDiemInput" placeholder="Nhập địa chỉ nhận quà của bạn" />
+                            </div>
+                            @Html.ValidationMessageFor(m => m.DiaDiemNhanQua, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="text-center mt-4">
+                            <h5 class="fw-bold">Tổng điểm sử dụng: <span id="tong-diem">0</span></h5>
+                            <div id="warning" class="alert alert-danger d-none mt-2">
+                                Bạn không đủ điểm để đổi phần thưởng này!
+                            </div>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-success btn-lg px-5 rounded-pill">
+                                <i class="bi bi-check-circle me-2"></i>Lưu Phiếu
+                            </button>
+                            <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary btn-lg px-4 rounded-pill ms-2">
+                                <i class="bi bi-x-circle me-2"></i>Hủy
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const khoSelect = document.getElementById('khoSelect');
+            const hinhThucSelect = document.getElementById('hinhThucSelect');
+            const diaDiemGroup = document.getElementById('diaDiemGroup');
+            const diaDiemInput = document.getElementById('diaDiemInput');
+            const khoInfo = document.getElementById('khoInfo');
+            const khoInfoText = document.getElementById('khoInfoText');
+
+            khoSelect.addEventListener('change', function () {
+                const maKQ = this.value;
+                if (maKQ) {
+                    fetch(`${window.location.origin}/PhieuDoiQua/LoadQuas?maKQ=${maKQ}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            const quasContainer = document.getElementById('quasContainer');
+
+                            if (!data.kho) {
+                                khoInfo.style.display = 'block';
+                                khoInfoText.innerHTML = '<strong class="text-danger">Kho quà không tồn tại hoặc đã bị xóa.</strong>';
+                                quasContainer.innerHTML = '';
+                                return;
+                            }
+
+                            khoInfo.style.display = 'block';
+                            khoInfoText.innerHTML = `<strong>Kho:</strong> ${data.kho.tenKQ} - ${data.kho.diaChiKQ}`;
+
+                            quasContainer.innerHTML = '';
+                            if (data.quas && data.quas.length > 0) {
+                                data.quas.forEach((qua) => {
+                                    const div = document.createElement('div');
+                                    div.className = 'col-md-6 col-lg-4';
+                                    div.innerHTML = `
+                                        <div class="card border-0 shadow-sm hover-card h-100 item-row" data-diemdoi="${qua.diemDoi}">
+                                            <div class="position-relative">
+                                                <img src="/images/${qua.hinhAnh}" class="card-img-top" style="height: 180px; object-fit: cover;" />
+                                                <span class="position-absolute top-0 end-0 bg-success text-white px-3 py-1 m-2 rounded-pill">
+                                                    ${qua.diemDoi} điểm
+                                                </span>
+                                            </div>
+                                            <div class="card-body">
+                                                <h5 class="card-title text-success">${qua.tenQua}</h5>
+                                                <p class="card-text text-muted">Còn lại: ${qua.soLuongTrongKho} phần</p>
+                                                ${qua.soLuongTrongKho > 0 ? `
+                                                    <input type="hidden" name="maQuas" value="${qua.maQua}" />
+                                                    <div class="input-group mt-3">
+                                                        <span class="input-group-text bg-light">Số lượng</span>
+                                                        <input type="number" name="soLuongs" class="form-control soluong-input" min="0" max="${qua.soLuongTrongKho}" value="0" />
+                                                    </div>
+                                                    <div class="mt-2 text-muted">Điểm cần: <span class="diemcan">0</span></div>
+                                                ` : `<div class="text-danger mt-3 fw-bold">Hết hàng</div>`}
+                                            </div>
+                                        </div>`;
+                                    quasContainer.appendChild(div);
+                                });
+                            } else {
+                                quasContainer.innerHTML = '<div class="col-12 text-center py-5"><i class="bi bi-emoji-frown text-muted" style="font-size: 3rem;"></i><p class="text-muted mt-3">Không có phần thưởng nào trong kho này.</p></div>';
+                            }
+                        });
+                } else {
+                    khoInfo.style.display = 'none';
+                    document.getElementById('quasContainer').innerHTML = '';
+                }
+            });
+
+            hinhThucSelect.addEventListener('change', function () {
+                const hinhThuc = this.value;
+                if (hinhThuc === 'TaiNha') {
+                    diaDiemGroup.style.display = 'block';
+                    diaDiemInput.removeAttribute('readonly');
+                    diaDiemInput.setAttribute('required', 'required');
+                    diaDiemInput.value = '';
+                    diaDiemInput.placeholder = 'Nhập địa chỉ nhận quà của bạn';
+                } else if (hinhThuc === 'TrucTiep') {
+                    diaDiemGroup.style.display = 'none';
+                    diaDiemInput.removeAttribute('required');
+                    diaDiemInput.setAttribute('readonly', 'readonly');
+                    diaDiemInput.value = 'Sẽ tự động lấy địa chỉ kho';
+                } else {
+                    diaDiemGroup.style.display = 'none';
+                    diaDiemInput.removeAttribute('required');
+                    diaDiemInput.removeAttribute('readonly');
+                    diaDiemInput.value = '';
+                }
+            });
+        });
+
+        let diemTichLuy = parseFloat('@ViewBag.UserDiem ?? 0');
+
+        function updateTongDiem() {
+            let tong = 0;
+            document.querySelectorAll(".item-row").forEach(row => {
+                const input = row.querySelector(".soluong-input");
+                if (!input) return;
+                const diemDoi = parseFloat(row.dataset.diemdoi);
+                const soLuong = parseInt(input.value) || 0;
+                const diemCan = soLuong * diemDoi;
+                row.querySelector(".diemcan").innerText = diemCan.toFixed(2);
+                tong += diemCan;
+            });
+            document.getElementById("tong-diem").innerText = tong.toFixed(2);
+            if (tong > diemTichLuy) {
+                document.getElementById("warning").classList.remove("d-none");
+                document.querySelector("button[type='submit']").disabled = true;
+            } else {
+                document.getElementById("warning").classList.add("d-none");
+                document.querySelector("button[type='submit']").disabled = false;
+            }
+        }
+
+        document.addEventListener("input", function (e) {
+            if (e.target.classList.contains("soluong-input")) {
+                updateTongDiem();
+            }
+        });
+
+        document.addEventListener("DOMContentLoaded", updateTongDiem);
+    </script>
+}

@@ -1,0 +1,93 @@
+﻿@model TrashToRewardsV2.Models.DONVITHUGOM
+
+@{
+    ViewData["Title"] = "Chi tiết đơn vị thu gom";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-lg">
+                <div class="card-body p-lg-5 p-4">
+                    <div class="d-flex align-items-center mb-4">
+                        <i class="bi bi-building-fill text-success fs-1 me-3"></i>
+                        <h2 class="fw-bold text-success mb-0">Chi tiết đơn vị thu gom</h2>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <div class="text-center mb-4">
+                        <div class="avatar bg-light rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 100px; height: 100px;">
+                            <i class="bi bi-building text-success" style="font-size: 3rem;"></i>
+                        </div>
+                        <h3 class="fw-bold">@Model.TenDV</h3>
+                    </div>
+
+                    <div class="bg-light p-4 rounded-3 mb-4">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-geo-alt-fill text-success fs-4 me-3"></i>
+                                    <div>
+                                        <div class="text-muted small">Địa chỉ</div>
+                                        <div class="fw-semibold">@Model.DiaChiDV</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-telephone-fill text-success fs-4 me-3"></i>
+                                    <div>
+                                        <div class="text-muted small">Số điện thoại</div>
+                                        <div class="fw-semibold">@Model.SDTDV</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-5">
+                        <h4 class="fw-bold text-success mb-4">
+                            <i class="bi bi-people-fill me-2"></i>Nhân viên thuộc đơn vị
+                        </h4>
+
+                        @if (Model.NHANVIENs != null && Model.NHANVIENs.Any())
+                        {
+                            <div class="list-group shadow-sm">
+                                @foreach (var nv in Model.NHANVIENs)
+                                {
+                                    <div class="list-group-item list-group-item-action d-flex align-items-center">
+                                        <i class="bi bi-person-fill text-success me-3"></i>
+                                        <div>
+                                            <div class="fw-semibold">@nv.HoTenNV</div>
+                                            <div class="text-muted small">@nv.EmailNV</div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="alert alert-info">
+                                <i class="bi bi-info-circle-fill me-2"></i>
+                                Chưa có nhân viên nào thuộc đơn vị này.
+                            </div>
+                        }
+                    </div>
+
+                    <div class="text-center mt-5">
+                        <a asp-action="Dashboard" class="btn btn-outline-success rounded-pill px-4">
+                            <i class="bi bi-arrow-left me-2"></i>Quay lại Dashboard
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

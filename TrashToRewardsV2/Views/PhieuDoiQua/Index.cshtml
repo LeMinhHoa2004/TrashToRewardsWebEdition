@@ -1,0 +1,155 @@
+﻿@model IEnumerable<TrashToRewardsV2.Models.PHIEUDOIQUA>
+
+@{
+    ViewData["Title"] = "Danh sách Phiếu Đổi Quà";
+}
+
+<div class="container py-4">
+    <div class="card border-0 shadow-lg">
+        <div class="card-header bg-primary bg-gradient text-white p-4">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2 class="mb-0 fw-bold">
+                    <i class="bi bi-ticket-perforated me-2"></i>
+                    Danh sách Phiếu Đổi Quà của bạn
+                </h2>
+                <a asp-action="Create" class="btn btn-success rounded-pill px-4">
+                    <i class="bi bi-plus-circle me-2"></i>Tạo phiếu đổi quà mới
+                </a>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            @if (Model != null && Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="px-4 py-3">Mã phiếu</th>
+                                <th class="px-4 py-3">Ngày đổi</th>
+                                <th class="px-4 py-3">Điểm sử dụng</th>
+                                <th class="px-4 py-3">Hình thức nhận</th>
+                                <th class="px-4 py-3">Trạng thái</th>
+                                <th class="px-4 py-3 text-center">Chi tiết</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr class="hover-card">
+                                    <td class="px-4 py-3">
+                                        <span class="fw-bold text-primary">#@item.MaPDQ</span>
+                                    </td>
+                                    <td class="px-4 py-3">@item.NgayGioDoi.ToString("dd/MM/yyyy HH:mm")</td>
+                                    <td class="px-4 py-3">
+                                        <span class="fw-bold text-success">@item.SoDiemSuDung</span> điểm
+                                    </td>
+                                    <td class="px-4 py-3">
+                                        @if (item.HinhThucNhanQua == "TaiNha")
+                                        {
+                                            <span class="badge bg-info rounded-pill">
+                                                <i class="bi bi-house me-1"></i> Tại nhà
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary rounded-pill">
+                                                <i class="bi bi-shop me-1"></i> Trực tiếp
+                                            </span>
+                                        }
+                                    </td>
+                                    <td class="px-4 py-3">
+                                        @{
+                                            string badgeClass = "bg-secondary";
+                                            string statusText = item.TrangThai;
+                                            string statusIcon = "bi-question-circle";
+
+                                            switch (item.TrangThai)
+                                            {
+                                                case "ChuaXacNhan":
+                                                    badgeClass = "bg-warning text-dark";
+                                                    statusText = "Chưa xác nhận";
+                                                    statusIcon = "bi-hourglass-split";
+                                                    break;
+                                                case "DaXacNhan":
+                                                    badgeClass = "bg-primary";
+                                                    statusText = "Đã xác nhận";
+                                                    statusIcon = "bi-check2-circle";
+                                                    break;
+                                                case "DangGiao":
+                                                    badgeClass = "bg-info text-dark";
+                                                    statusText = "Đang giao";
+                                                    statusIcon = "bi-truck";
+                                                    break;
+                                                case "DaGiao":
+                                                    badgeClass = "bg-success";
+                                                    statusText = "Đã giao";
+                                                    statusIcon = "bi-box-seam";
+                                                    break;
+                                                case "ChuaNhan":
+                                                    badgeClass = "bg-info text-dark";
+                                                    statusText = "Chưa nhận";
+                                                    statusIcon = "bi-clock";
+                                                    break;
+                                                case "DaNhan":
+                                                    badgeClass = "bg-success";
+                                                    statusText = "Đã nhận";
+                                                    statusIcon = "bi-check-all";
+                                                    break;
+                                                case "DaHuy":
+                                                    badgeClass = "bg-danger";
+                                                    statusText = "Đã hủy";
+                                                    statusIcon = "bi-x-circle";
+                                                    break;
+                                            }
+                                        }
+                                        <span class="badge @badgeClass rounded-pill fs-6 px-3 py-2">
+                                            <i class="bi @statusIcon me-2" style="font-size:1.1rem;"></i> @statusText
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-3 text-center">
+                                        <a asp-action="Details" asp-route-id="@item.MaPDQ" class="btn btn-outline-primary btn-sm rounded-pill px-3">
+                                            <i class="bi bi-eye me-1"></i> Xem chi tiết
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5">
+                    <div class="mb-4">
+                        <i class="bi bi-ticket-perforated-fill text-secondary" style="font-size: 4rem;"></i>
+                    </div>
+                    <h4 class="text-muted">Bạn chưa có phiếu đổi quà nào</h4>
+                    <p class="text-muted mb-4">Hãy tạo phiếu đổi quà mới để đổi điểm lấy phần thưởng</p>
+                    <a asp-action="Create" class="btn btn-success rounded-pill px-4 py-2">
+                        <i class="bi bi-plus-circle me-2"></i>Tạo phiếu đổi quà mới
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    .hover-card:hover {
+        background-color: #e8f0fe !important;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    table td.text-center {
+        white-space: nowrap; /* Không xuống dòng */
+        width: 110px; /* Giới hạn chiều rộng cột */
+    }
+
+        table td.text-center a.btn {
+            padding: 4px 10px; /* Giảm padding để nút nhỏ hơn */
+            font-size: 0.85rem; /* Nút nhỏ hơn */
+            white-space: nowrap; /* Nút không xuống dòng */
+        }
+
+</style>

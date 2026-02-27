@@ -1,0 +1,86 @@
+﻿@model TrashToRewardsV2.Models.ADMIN
+@{
+    ViewData["Title"] = "Thêm Admin";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-lg">
+                <div class="card-body p-lg-5 p-4">
+                    <div class="mb-4 text-center">
+                        <i class="bi bi-shield-lock-fill text-success fs-1"></i>
+                        <h2 class="fw-bold text-success">Thêm Admin</h2>
+                        <p class="text-muted">Tạo tài khoản quản trị viên mới cho hệ thống</p>
+                    </div>
+
+                    <form asp-action="CreateAdmin" method="post" class="needs-validation" novalidate>
+                        @if (!ViewData.ModelState.IsValid)
+                        {
+                            <div asp-validation-summary="All" class="alert alert-danger" role="alert"></div>
+                        }
+                        <div class="mb-3">
+                            <label asp-for="HoTenAD" class="form-label">Họ tên</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-person-fill"></i></span>
+                                <input asp-for="HoTenAD" class="form-control" required placeholder="Nhập họ tên đầy đủ" />
+                            </div>
+                            <span asp-validation-for="HoTenAD" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="SDTAD" class="form-label">Số điện thoại</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-telephone-fill"></i></span>
+                                <input asp-for="SDTAD" class="form-control" required placeholder="Nhập số điện thoại" />
+                            </div>
+                            <span asp-validation-for="SDTAD" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="EmailAD" class="form-label">Email</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-envelope-fill"></i></span>
+                                <input asp-for="EmailAD" class="form-control" type="email" required placeholder="example@email.com" />
+                            </div>
+                            <span asp-validation-for="EmailAD" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="MatKhauAD" class="form-label">Mật khẩu</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-key-fill"></i></span>
+                                <input asp-for="MatKhauAD" class="form-control" type="password" required placeholder="Nhập mật khẩu" />
+                            </div>
+                            <span asp-validation-for="MatKhauAD" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-success btn-lg rounded-pill">
+                                <i class="bi bi-person-plus-fill me-2"></i>Thêm Admin
+                            </button>
+                            <a asp-action="Dashboard" class="btn btn-outline-secondary rounded-pill">
+                                <i class="bi bi-arrow-left me-2"></i>Quay lại Dashboard
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        // Add animation on form elements
+        document.addEventListener('DOMContentLoaded', function() {
+            const formElements = document.querySelectorAll('.form-control, .btn');
+            formElements.forEach((element, index) => {
+                setTimeout(() => {
+                    element.classList.add('visible');
+                }, 100 * index);
+            });
+        });
+    </script>
+}

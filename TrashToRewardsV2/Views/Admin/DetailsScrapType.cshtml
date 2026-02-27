@@ -1,0 +1,84 @@
+﻿@model TrashToRewardsV2.Models.LOAIPHELIEU
+
+@{
+    ViewData["Title"] = "Chi tiết loại phế liệu";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-lg">
+                <div class="card-body p-lg-5 p-4">
+                    <div class="d-flex align-items-center mb-4">
+                        <i class="bi bi-recycle text-success fs-1 me-3"></i>
+                        <h2 class="fw-bold text-success mb-0">Chi tiết loại phế liệu</h2>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <div class="p-4 bg-light rounded-3 mb-4">
+                        <div class="d-flex justify-content-center mb-4">
+                            @{
+                                // Chọn biểu tượng dựa trên tên loại (nếu có thể)
+                                string iconClass = "bi-trash";
+
+                                if (Model.TenLoai != null)
+                                {
+                                    var tenLoai = Model.TenLoai.ToLower();
+                                    if (tenLoai.Contains("nhựa")) { iconClass = "bi-cup-straw"; }
+                                    else if (tenLoai.Contains("giấy")) { iconClass = "bi-newspaper"; }
+                                    else if (tenLoai.Contains("pin") || tenLoai.Contains("điện tử")) { iconClass = "bi-battery-charging"; }
+                                    else if (tenLoai.Contains("kim loại") || tenLoai.Contains("sắt") || tenLoai.Contains("nhôm")) { iconClass = "bi-box-seam"; }
+                                    else if (tenLoai.Contains("thủy tinh")) { iconClass = "bi-cup-hot"; }
+                                }
+                            }
+                            <i class="bi @iconClass text-success" style="font-size: 5rem;"></i>
+                        </div>
+
+                        <div class="text-center mb-3">
+                            <h3 class="fw-bold">@Model.TenLoai</h3>
+                        </div>
+                    </div>
+
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="card border-0 shadow-sm h-100">
+                                <div class="card-body text-center p-4">
+                                    <div class="mb-3">
+                                        <i class="bi bi-rulers text-success fs-1"></i>
+                                    </div>
+                                    <h4 class="card-title h5">Đơn vị</h4>
+                                    <p class="card-text fs-5">@Model.DonVi</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="card border-0 shadow-sm h-100">
+                                <div class="card-body text-center p-4">
+                                    <div class="mb-3">
+                                        <i class="bi bi-percent text-success fs-1"></i>
+                                    </div>
+                                    <h4 class="card-title h5">Tỉ lệ điểm</h4>
+                                    <p class="card-text fs-5">@Model.TiLeDiem</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-5">
+                        <a asp-action="Dashboard" class="btn btn-outline-success rounded-pill px-4">
+                            <i class="bi bi-arrow-left me-2"></i>Quay lại Dashboard
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

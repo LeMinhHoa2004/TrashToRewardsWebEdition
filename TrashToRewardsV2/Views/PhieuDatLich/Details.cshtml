@@ -1,0 +1,153 @@
+﻿@model PHIEUDATLICH
+
+@{
+    ViewData["Title"] = "Chi tiết phiếu đặt lịch";
+    var phieuThuGom = ViewBag.PhieuThuGom as PHIEUTHUGOM;
+    bool isUser = User.IsInRole("NGUOIDUNG");
+    bool isStaff = User.IsInRole("NHANVIEN");
+}
+
+<div class="container py-5">
+    <h2 class="text-success fw-bold mb-4">
+        <i class="bi bi-calendar-check me-2"></i>Chi tiết phiếu đặt lịch
+    </h2>
+
+    <div class="card border-0 shadow-lg mb-4 hover-card">
+        <div class="card-header bg-success text-white p-3">
+            <h5 class="mb-0"><i class="bi bi-info-circle me-2"></i>Thông tin phiếu đặt lịch</h5>
+        </div>
+        <div class="card-body p-4">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <p class="mb-3"><strong><i class="bi bi-upc me-2"></i>Mã phiếu:</strong> <span class="badge bg-light text-dark p-2">@Model.MaPhieuDL</span></p>
+                    <p class="mb-3"><strong><i class="bi bi-calendar me-2"></i>Ngày đặt lịch:</strong> @Model.NgayDL.ToString("dd/MM/yyyy HH:mm")</p>
+                    <p class="mb-3"><strong><i class="bi bi-geo-alt me-2"></i>Địa điểm thu gom:</strong> @Model.DiaDiemDL</p>
+                </div>
+                <div class="col-md-6">
+                    <p class="mb-3">
+                        <strong><i class="bi bi-star me-2"></i>Trạng thái:</strong>
+                        @switch (Model.TrangThaiDL)
+                        {
+                            case "ChuaXacNhan":
+                                <span class="badge bg-warning p-2"><i class="bi bi-hourglass-split me-1"></i>Chưa xác nhận</span>
+                                break;
+                            case "DaXacNhan":
+                                <span class="badge bg-info p-2"><i class="bi bi-check-circle me-1"></i>Đã xác nhận</span>
+                                break;
+                            case "DaXuLy":
+                                <span class="badge bg-success p-2"><i class="bi bi-check-circle-fill me-1"></i>Đã xử lý</span>
+                                break;
+                            case "DaHuy":
+                                <span class="badge bg-danger p-2"><i class="bi bi-x-circle me-1"></i>Đã hủy</span>
+                                break;
+                        }
+                    </p>
+                    <p class="mb-3"><strong><i class="bi bi-person me-2"></i>Người đặt lịch:</strong> @Model.NGUOIDUNG?.HoTen</p>
+                    <p class="mb-3"><strong><i class="bi bi-house me-2"></i>Địa chỉ:</strong> @Model.NGUOIDUNG?.DiaChi</p>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                @if (isUser && (Model.TrangThaiDL == "ChuaXacNhan" || Model.TrangThaiDL == "DaXacNhan"))
+                {
+                    <form asp-action="Cancel" asp-route-id="@Model.MaPhieuDL" method="post"
+                          onsubmit="return confirm('Bạn có chắc muốn hủy đặt lịch này?');" class="d-inline">
+                        <button type="submit" class="btn btn-danger rounded-pill px-4">
+                            <i class="bi bi-x-circle me-2"></i>Hủy đặt lịch
+                        </button>
+                    </form>
+                }
+
+                @if (isStaff && Model.TrangThaiDL == "ChuaXacNhan")
+                {
+                    <form asp-action="Confirm" asp-route-id="@Model.MaPhieuDL" method="post" class="d-inline">
+                        <button type="submit" class="btn btn-success rounded-pill px-4">
+                            <i class="bi bi-check-circle me-2"></i>Xác nhận đặt lịch
+                        </button>
+                    </form>
+                }
+
+                @if (isStaff && Model.TrangThaiDL == "DaXacNhan")
+                {
+                    <a asp-controller="PhieuThuGom" asp-action="Create" asp-route-maPhieuDL="@Model.MaPhieuDL" class="btn btn-info rounded-pill px-4 text-white">
+                        <i class="bi bi-receipt me-2"></i>Lập phiếu thu gom
+                    </a>
+                }
+
+                @if (isUser)
+                {
+                    <a asp-action="Index" class="btn btn-outline-secondary rounded-pill px-4 ms-2">
+                        <i class="bi bi-arrow-left me-2"></i>Quay lại danh sách
+                    </a>
+                }
+                @if (isStaff)
+                {
+                    <a asp-action="List" class="btn btn-outline-secondary rounded-pill px-4 ms-2">
+                        <i class="bi bi-arrow-left me-2"></i>Quay lại danh sách
+                    </a>
+                }
+            </div>
+        </div>
+    </div>
+
+    @if (phieuThuGom != null)
+    {
+        <div class="card border-0 shadow-lg mb-4 hover-card">
+            <div class="card-header bg-success text-white p-3">
+                <h5 class="mb-0"><i class="bi bi-receipt me-2"></i>Thông tin phiếu thu gom</h5>
+            </div>
+            <div class="card-body p-4">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <p class="mb-3"><strong><i class="bi bi-upc me-2"></i>Mã phiếu thu gom:</strong> <span class="badge bg-light text-dark p-2">@phieuThuGom.MaPhieu</span></p>
+                        <p class="mb-3"><strong><i class="bi bi-person-badge me-2"></i>Nhân viên thu gom:</strong> @phieuThuGom.NHANVIEN.HoTenNV</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="mb-3"><strong><i class="bi bi-award me-2"></i>Tổng điểm:</strong> <span class="badge bg-success p-2 fs-5">@phieuThuGom.TongDiem</span></p>
+                    </div>
+                </div>
+
+                <h6 class="fw-bold mb-3"><i class="bi bi-list-check me-2"></i>Chi tiết phế liệu thu gom:</h6>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="bg-light">
+                            <tr>
+                                <th><i class="bi bi-tags me-2"></i>Loại phế liệu</th>
+                                <th><i class="bi bi-box me-2"></i>Khối lượng</th>
+                                <th><i class="bi bi-star me-2"></i>Điểm nhận được</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in phieuThuGom.CTPHIEUTHUGOMs)
+                            {
+                                <tr>
+                                    <td>@item.LOAIPHELIEU.TenLoai</td>
+                                    <td>@item.KhoiLuong @item.LOAIPHELIEU.DonVi</td>
+                                    <td class="text-success fw-bold">@item.SoDiemNhanDuoc</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                @if (isUser)
+                {
+                    <div class="mt-4">
+                        <a asp-controller="NguoiDungPhieu" asp-action="PhieuThuGomDetails" asp-route-id="@phieuThuGom.MaPhieu" class="btn btn-success rounded-pill px-4">
+                            <i class="bi bi-eye me-2"></i>Xem chi tiết phiếu thu gom
+                        </a>
+                    </div>
+                }
+                @if (isStaff)
+                {
+                    <div class="mt-4">
+                        <a asp-controller="PhieuThuGom" asp-action="Details" asp-route-id="@phieuThuGom.MaPhieu" class="btn btn-success rounded-pill px-4">
+                            <i class="bi bi-eye me-2"></i>Xem chi tiết phiếu thu gom
+                        </a>
+                    </div>
+                }
+                
+            </div>
+        </div>
+    }
+</div>
